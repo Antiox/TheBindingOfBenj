@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Utilities;
 
 namespace GameLibrary
 {
@@ -42,7 +44,6 @@ namespace GameLibrary
 
         public void Update()
         {
-
         }
 
         private void GenerateMap()
@@ -82,6 +83,12 @@ namespace GameLibrary
                 if (item.Key == "BossRoom") _map[(int)item.Value.x, (int)item.Value.y].ChangeColor(Color.red);
                 if (item.Key.StartsWith("OtherRoom")) _map[(int)item.Value.x, (int)item.Value.y].ChangeColor(Color.blue);
             }
+
+            AddRoomNeighbours();
+
+            ConnectRoomsAStar(_specialRooms["SpawnRoom"], _specialRooms["BossRoom"]);
+            ConnectRoomsAStar(_specialRooms["OtherRoom1"], _specialRooms["BossRoom"]);
+            ConnectRoomsAStar(_specialRooms["OtherRoom2"], _specialRooms["BossRoom"]);
         }
 
         /// <summary>
@@ -153,5 +160,141 @@ namespace GameLibrary
             return Vector2.Distance(vector, _specialRooms["BossRoom"]) > 1 && !_specialRooms.ContainsValue(vector);
         }
 
+        /// <summary>
+        /// parcours toutes les salles et actualise leurs voisins
+        /// </summary>
+        private void AddRoomNeighbours()
+        {
+            for (int i = 0; i < _columnCount; i++)
+            {
+                for (int j = 0; j < _rowCount; j++)
+                {
+                    if (i > 0) _map[i, j].AddNeighbour(_map[i - 1, j]);
+                    if (i < _columnCount - 1) _map[i, j].AddNeighbour(_map[i + 1, j]);
+                    if (j > 0) _map[i, j].AddNeighbour(_map[i, j - 1]);
+                    if (j < _rowCount - 1) _map[i, j].AddNeighbour(_map[i, j + 1]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ouvre les portes entre la salle from et la salle to
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        private void ConnectRoomsAStar(Vector2 from, Vector2 to)
+        {
+            Debug.Log("de là : " + from + " à là : " + to);
+
+            RoomScript start = _map[(int) from.x, (int) from.y];
+            RoomScript end = _map[(int) to.x, (int) to.y];
+
+            // calcule l'heuristique de chaque salle et on réinitialise les couts à défaut;
+            for (int i = 0; i < _columnCount; i++)
+            {
+                for (int j = 0; j < _rowCount; j++)
+                {
+                    _map[i, j].HCost = Vector2.Distance(new Vector2(i, j), to);
+                    _map[i, j].GCost = 10000;
+                }
+            }
+            // met le cout du from à 0
+            _map[(int) from.x, (int) from.y].GCost = 0;
+
+            List<RoomScript> openSet = new List<RoomScript>();
+            HashSet<RoomScript> closedSet = new HashSet<RoomScript>();
+
+            // mettre le nœud de départ dans OUVERT
+            openSet.Add(start);
+
+            // si OUVERT est vide, sortir avec Echec, sinon continuer
+            while (openSet.Count != 0)
+            {
+                // ordonner OUVERT suivant la fonction f(n)
+                openSet = openSet.OrderBy(room => room.GCost + room.HCost).ToList<RoomScript>();
+
+                // enlever le nœud de la tête de OUVERT et le mettre dans FERME. Appeler ce nœud n
+                var n = openSet[0];
+                openSet.RemoveAt(0);
+                closedSet.Add(n);
+
+                // développer n en générant tous ses successeurs
+                foreach (var neighbour in n.Neighbours)
+                {
+                    // si le noeud est le noeud but
+                    if (n != end)
+                    {
+                        // pour tout successeur n’ de n : a.calculer f(n’)
+                        float cost = n.GCost + 1;
+
+                        // si n’ n’est ni dans OUVERT ni dans FERME l’ajouter à OUVERT
+                        if (!openSet.Contains(neighbour) && !closedSet.Contains(neighbour)) openSet.Add(neighbour);
+
+                        // si l’ancien cout est supérieur, nouvelle route 
+                        if (neighbour.GCost > cost)
+                        {
+                            neighbour.GCost = cost;
+                            neighbour.Parent = n;
+                        }
+                    }
+                    else
+                    {
+                        // backtracking  pour ouvrir les portes du chemin
+                        RoomScript currentNode = end;
+
+                        Debug.Log("backtracking");
+
+                        int count = 0;
+
+                        while (currentNode != null && count < 100)
+                        {
+                            count++;
+                            Debug.Log("truc : " + currentNode);
+                            var childCoordinates = _map.CoordinatesOf(currentNode);
+                            var parentCoordinates = _map.CoordinatesOf(currentNode.Parent);
+
+                            var doorDirection = (parentCoordinates - childCoordinates);
+
+                            DoorType doorsToOpen = DoorType.None;
+                            DoorType doorsToOpenParent = DoorType.None; // à optimiser (car ça ouvre la porte que d'un coté de la salle)
+
+                            if (currentNode.Parent != null) // pour la dernière salle (qui n'a pas de parent)
+                            {
+                                if (doorDirection.x == -1)
+                                {
+                                    doorsToOpen |= DoorType.Left;
+                                    doorsToOpenParent |= DoorType.Right;
+                                }
+                                else if (doorDirection.x == 1)
+                                {
+                                    doorsToOpen |= DoorType.Right;
+                                    doorsToOpenParent |= DoorType.Left;
+                                }
+                                if (doorDirection.y == -1)
+                                {
+                                    doorsToOpen |= DoorType.Down;
+                                    doorsToOpenParent |= DoorType.Up;
+                                }
+                                else if (doorDirection.y == 1)
+                                {
+                                    doorsToOpen |= DoorType.Up;
+                                    doorsToOpenParent |= DoorType.Down;
+                                }
+
+                                currentNode.Parent.OpenDoors(doorsToOpenParent);
+                            }
+
+                            currentNode.OpenDoors(doorsToOpen);
+
+                            currentNode = currentNode.Parent;
+                        }
+                        Debug.Log(count);
+
+                        return;
+                    }
+                }
+            }
+
+        }
     }
 }

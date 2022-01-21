@@ -1,9 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoomScript : MonoBehaviour
 {
+    public float GCost { get; set; }
+
+    public float HCost { get; set; }
+
+    public List<RoomScript> Neighbours { get; private set; }
+
+    /// <summary>
+    /// Utilisé pour le backtracking de l'algo A* pour connecter les salles
+    /// </summary>
+    public RoomScript Parent { get; set; }
+
+
     /// <summary>
     /// Indique la largeur et hauteur de la salle
     /// </summary>
@@ -23,20 +36,35 @@ public class RoomScript : MonoBehaviour
     public GameObject LeftDoor { get; private set; }
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        UpDoor = GameObject.Find("UW_Door");
-        RightDoor = GameObject.Find("RW_Door");
-        DownDoor = GameObject.Find("DW_Door");
-        LeftDoor = GameObject.Find("LW_Door");
+        UpDoor = transform.GetChild(0).GetChild(2).gameObject;
+        RightDoor = transform.GetChild(1).GetChild(2).gameObject;
+        DownDoor = transform.GetChild(2).GetChild(2).gameObject;
+        LeftDoor = transform.GetChild(3).GetChild(2).gameObject;
+        GCost = 10000;
+        HCost = 0;
+        Neighbours = new List<RoomScript>();
+    }
+
+    private void Update()
+    {
+        GetComponentInChildren<Text>().text = GCost.ToString() + " " + HCost;
     }
 
     public void OpenDoors(DoorType type)
     {
-        UpDoor.SetActive(!type.HasFlag(DoorType.Up));
-        RightDoor.SetActive(!type.HasFlag(DoorType.Right));
-        DownDoor.SetActive(!type.HasFlag(DoorType.Down));
-        LeftDoor.SetActive(!type.HasFlag(DoorType.Left));
+        if (type.HasFlag(DoorType.Up))
+            UpDoor.SetActive(false);
+
+        if (type.HasFlag(DoorType.Right))
+            RightDoor.SetActive(false);
+
+        if (type.HasFlag(DoorType.Down))
+            DownDoor.SetActive(false);
+
+        if (type.HasFlag(DoorType.Left))
+            LeftDoor.SetActive(false);
     }
 
     public void ChangeColor(Color color)
@@ -46,6 +74,11 @@ public class RoomScript : MonoBehaviour
         {
             sprite.color = color;
         }
+    }
+
+    public void AddNeighbour(RoomScript room)
+    {
+        Neighbours.Add(room);
     }
 
 }
