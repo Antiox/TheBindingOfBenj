@@ -7,25 +7,16 @@ namespace Utilities
 {
     public static class Extensions 
     {
-        public static Vector2 CoordinatesOf<T>(this T[,] matrix, T value)
+        /// <summary>
+        /// accède à la valeur grâce à un vector2
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="matrix"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static T Get<T>(this T[,] matrix, Vector2 value)
         {
-            int w = matrix.GetLength(0); // width
-            int h = matrix.GetLength(1); // height
-
-            for (int x = 0; x < w; ++x)
-            {
-                for (int y = 0; y < h; ++y)
-                {
-                    if (matrix[x, y].Equals(value))
-                    {
-                        return new Vector2(x, y);
-                    }
-                }
-            }
-
-            return new Vector2(0, 0);
+            return matrix[(int) value.x, (int) value.y];
         }
-
-
     }
 }

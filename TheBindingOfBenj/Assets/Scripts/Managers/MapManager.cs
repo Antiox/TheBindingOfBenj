@@ -9,7 +9,7 @@ namespace GameLibrary
     public class MapManager
     {
         private int _columnCount, _rowCount;
-        private Dictionary<string, Vector2> _specialRooms;
+        private Dictionary<string, RoomScript> _specialRooms;
         private readonly RoomScript[,] _map;
 
         private GameObject _roomContainer;
@@ -31,7 +31,7 @@ namespace GameLibrary
             _columnCount = 5;
             _rowCount = 5;
             _map = new RoomScript[_columnCount, _rowCount];
-            _specialRooms = new Dictionary<string, Vector2>();
+            _specialRooms = new Dictionary<string, RoomScript>();
         }
 
         #endregion
@@ -59,36 +59,36 @@ namespace GameLibrary
                     GameObject room = Object.Instantiate(roomPrefab, new Vector3(i * roomScript.Size.x, j * roomScript.Size.y, 1), Quaternion.identity, _roomContainer.transform);
 
                     _map[i, j] = room.GetComponent<RoomScript>();
+                    _map[i, j].Coordinates = new Vector2(i, j);
                     room.name = i + " " + j;
                 }
             }
 
             // place un point aléatoire pour le spawn du joueur
             // uniquement sur les aretes
-            _specialRooms.Add("SpawnRoom", RandomPossibleCoordinates(IsOnEdge));
+            _specialRooms.Add("SpawnRoom", _map.Get(RandomPossibleCoordinates(IsOnEdge)));
 
             // place un point aléatoire pour la salle de boss
             // uniquement sur le coté opposé au spawn
-            _specialRooms.Add("BossRoom", RandomPossibleCoordinates(OnOppositeSide));
+            _specialRooms.Add("BossRoom", _map.Get(RandomPossibleCoordinates(OnOppositeSide)));
 
+            _specialRooms.Add("OtherRoom1", _map.Get(RandomPossibleCoordinates(AwayFromBossRoom)));
 
-            _specialRooms.Add("OtherRoom1", RandomPossibleCoordinates(AwayFromBossRoom));
-
-            _specialRooms.Add("OtherRoom2", RandomPossibleCoordinates(AwayFromBossRoom));
+            _specialRooms.Add("OtherRoom2", _map.Get(RandomPossibleCoordinates(AwayFromBossRoom)));
 
             /// debug
-            foreach (KeyValuePair<string, Vector2> item in _specialRooms)
+            foreach (KeyValuePair<string, RoomScript> item in _specialRooms)
             {
-                if (item.Key == "SpawnRoom") _map[(int)item.Value.x, (int)item.Value.y].ChangeColor(Color.green);
-                if (item.Key == "BossRoom") _map[(int)item.Value.x, (int)item.Value.y].ChangeColor(Color.red);
-                if (item.Key.StartsWith("OtherRoom")) _map[(int)item.Value.x, (int)item.Value.y].ChangeColor(Color.blue);
+                if (item.Key == "SpawnRoom") _map.Get(item.Value.Coordinates).ChangeColor(Color.green);
+                if (item.Key == "BossRoom") _map.Get(item.Value.Coordinates).ChangeColor(Color.red);
+                if (item.Key.StartsWith("OtherRoom")) _map.Get(item.Value.Coordinates).ChangeColor(Color.blue);
             }
 
             AddRoomNeighbours();
 
             ConnectRoomsAStar(_specialRooms["SpawnRoom"], _specialRooms["BossRoom"]);
-            ConnectRoomsAStar(_specialRooms["OtherRoom1"], _specialRooms["BossRoom"]);
-            ConnectRoomsAStar(_specialRooms["OtherRoom2"], _specialRooms["BossRoom"]);
+            ConnectRoomsAStar(_specialRooms["OtherRoom1"], _specialRooms["SpawnRoom"]);
+            ConnectRoomsAStar(_specialRooms["OtherRoom2"], _specialRooms["SpawnRoom"]);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace GameLibrary
         /// <returns></returns>
         private bool OnOppositeSide(Vector2 vector)
         {
-            Vector2 spawnRoom = _specialRooms["SpawnRoom"];
+            Vector2 spawnRoom = _specialRooms["SpawnRoom"].Coordinates;
             if (spawnRoom.x == 0)
             {
                 return vector.x == _columnCount - 1;
@@ -157,7 +157,7 @@ namespace GameLibrary
         /// <returns></returns>
         private bool AwayFromBossRoom(Vector2 vector)
         {
-            return Vector2.Distance(vector, _specialRooms["BossRoom"]) > 1 && !_specialRooms.ContainsValue(vector);
+            return Vector2.Distance(vector, _specialRooms["BossRoom"].Coordinates) > 1 && !_specialRooms.ContainsValue(_map.Get(vector));
         }
 
         /// <summary>
@@ -182,30 +182,26 @@ namespace GameLibrary
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        private void ConnectRoomsAStar(Vector2 from, Vector2 to)
+        private void ConnectRoomsAStar(RoomScript from, RoomScript to)
         {
-            Debug.Log("de là : " + from + " à là : " + to);
-
-            RoomScript start = _map[(int) from.x, (int) from.y];
-            RoomScript end = _map[(int) to.x, (int) to.y];
-
-            // calcule l'heuristique de chaque salle et on réinitialise les couts à défaut;
+            // on réinitialise à chaque fois la grille : l'heuristique, meilleure cout et parent;
             for (int i = 0; i < _columnCount; i++)
             {
                 for (int j = 0; j < _rowCount; j++)
                 {
-                    _map[i, j].HCost = Vector2.Distance(new Vector2(i, j), to);
+                    _map[i, j].HCost = Vector2.Distance(new Vector2(i, j), to.Coordinates);
                     _map[i, j].GCost = 10000;
+                    _map[i, j].Parent = null;
                 }
             }
             // met le cout du from à 0
-            _map[(int) from.x, (int) from.y].GCost = 0;
+            from.GCost = 0;
 
             List<RoomScript> openSet = new List<RoomScript>();
             HashSet<RoomScript> closedSet = new HashSet<RoomScript>();
 
             // mettre le nœud de départ dans OUVERT
-            openSet.Add(start);
+            openSet.Add(from);
 
             // si OUVERT est vide, sortir avec Echec, sinon continuer
             while (openSet.Count != 0)
@@ -222,10 +218,10 @@ namespace GameLibrary
                 foreach (var neighbour in n.Neighbours)
                 {
                     // si le noeud est le noeud but
-                    if (n != end)
+                    if (n != to)
                     {
                         // pour tout successeur n’ de n : a.calculer f(n’)
-                        float cost = n.GCost + 1;
+                        float cost = n.GCost + neighbour.Weight;
 
                         // si n’ n’est ni dans OUVERT ni dans FERME l’ajouter à OUVERT
                         if (!openSet.Contains(neighbour) && !closedSet.Contains(neighbour)) openSet.Add(neighbour);
@@ -240,26 +236,28 @@ namespace GameLibrary
                     else
                     {
                         // backtracking  pour ouvrir les portes du chemin
-                        RoomScript currentNode = end;
+                        RoomScript currentNode = to;
 
-                        Debug.Log("backtracking");
-
-                        int count = 0;
-
-                        while (currentNode != null && count < 100)
+                        while (currentNode != null)
                         {
-                            count++;
-                            Debug.Log("truc : " + currentNode);
-                            var childCoordinates = _map.CoordinatesOf(currentNode);
-                            var parentCoordinates = _map.CoordinatesOf(currentNode.Parent);
-
-                            var doorDirection = (parentCoordinates - childCoordinates);
-
                             DoorType doorsToOpen = DoorType.None;
                             DoorType doorsToOpenParent = DoorType.None; // à optimiser (car ça ouvre la porte que d'un coté de la salle)
 
                             if (currentNode.Parent != null) // pour la dernière salle (qui n'a pas de parent)
                             {
+                                // augmentation de la pondération des salles où on est déjà passé et les salles adjacentes
+                                currentNode.Weight += 10;
+                                foreach (var currentNeighbour in currentNode.Neighbours)
+                                {
+                                    if (!currentNode.Parent.Type.HasFlag(RoomType.Boss | RoomType.Spawn))
+                                    {
+                                        currentNeighbour.Weight += 5;
+                                    }
+                                }
+
+
+                                // ouvertures des portes
+                                var doorDirection = (currentNode.Parent.Coordinates - currentNode.Coordinates);
                                 if (doorDirection.x == -1)
                                 {
                                     doorsToOpen |= DoorType.Left;
@@ -288,7 +286,6 @@ namespace GameLibrary
 
                             currentNode = currentNode.Parent;
                         }
-                        Debug.Log(count);
 
                         return;
                     }

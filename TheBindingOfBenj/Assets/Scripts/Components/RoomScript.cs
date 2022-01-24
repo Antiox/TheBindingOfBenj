@@ -5,10 +5,22 @@ using UnityEngine.UI;
 
 public class RoomScript : MonoBehaviour
 {
+    // coordonnées sur la map
+    public Vector2 Coordinates { get; set; }
+
+    // type de salle
+    public RoomType Type { get; set; }
+
+    // pondération
+    public float Weight { get; set; }
+
+    // meilleur cout actuel
     public float GCost { get; set; }
 
+    // heuristique
     public float HCost { get; set; }
 
+    // salles voisines
     public List<RoomScript> Neighbours { get; private set; }
 
     /// <summary>
@@ -35,7 +47,7 @@ public class RoomScript : MonoBehaviour
     public GameObject DownDoor { get; private set; }
     public GameObject LeftDoor { get; private set; }
 
-    // Start is called before the first frame update
+
     void Awake()
     {
         UpDoor = transform.GetChild(0).GetChild(2).gameObject;
@@ -44,6 +56,8 @@ public class RoomScript : MonoBehaviour
         LeftDoor = transform.GetChild(3).GetChild(2).gameObject;
         GCost = 10000;
         HCost = 0;
+        Weight = 1;
+        Type = RoomType.Normal;
         Neighbours = new List<RoomScript>();
     }
 
