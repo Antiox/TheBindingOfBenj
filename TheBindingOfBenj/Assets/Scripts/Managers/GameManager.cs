@@ -3,28 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+namespace GameLibrary
 {
-    #region Singleton
-    private static GameManager instance;
-    public static GameManager Instance
-    {
-        get
+    public class GameManager : MonoBehaviour {
+        #region Singleton
+        private static GameManager instance;
+        public static GameManager Instance
         {
-            return instance ??= new GameManager();
+            get
+            {
+                return instance ??= new GameManager();
+            }
         }
-    }
-    private GameManager() { }
-    #endregion
+        private GameManager() { }
+        #endregion
 
 
-    public void Start()
-    {
-        MapManager.Instance.Start();
-    }
+        public void Start()
+        {
+            MapManager.Instance.Start();
+        }
 
-    public void Update()
-    {
-        MapManager.Instance.Update();
+        public void Update()
+        {
+            MapManager.Instance.Update();
+        }
     }
 }
