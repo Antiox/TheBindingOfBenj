@@ -106,7 +106,7 @@ MonoBehaviour:
   obstaclePenetration: 0.4
   ignoreMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 576
 --- !u!33 &5619080885673228937
 MeshFilter:
   m_ObjectHideFlags: 0

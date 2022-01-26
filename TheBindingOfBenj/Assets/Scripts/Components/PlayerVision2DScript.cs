@@ -7,7 +7,7 @@ public class PlayerVision2DScript : MonoBehaviour
     private float fieldOfView = 90f;
 
     [SerializeField, Range(5, 1000), Tooltip("Nombre de raycast pour la vérification d'obstacles. Plus c'est élevé, plus c'est précis")] 
-    private float precision = 5f;
+    private float raycastCount = 5f;
 
     [SerializeField, Range(1, 100), Tooltip("Distance maximale de la lampe torche")] 
     private float viewDistance = 30f;
@@ -38,15 +38,15 @@ public class PlayerVision2DScript : MonoBehaviour
         var direction = (mousePosition - transform.position).normalized * viewDistance;
 
         // Valeur symbolisant l'espace en degrés entre deux raycast
-        var step = fieldOfView / precision;
+        var step = fieldOfView / raycastCount;
 
         // Vertex et triangles du mesh que l'on va dessiner
-        var vertices = new Vector3[(int)precision + 1];
-        var triangles = new int[(int)(precision - 1) * 3];
+        var vertices = new Vector3[(int)raycastCount + 1];
+        var triangles = new int[(int)(raycastCount - 1) * 3];
 
         // Pour chaque raycast que l'on va envoyé (on part de (fov/2)° vers -(fov/2)°, pour centrer le fov au niveau de la souris.
         // Par exemple, pour un fov à 100°, on boucle de 50° à -50°
-        for (int i = 0; i < precision - 1; i++)
+        for (int i = 0; i < raycastCount - 1; i++)
         {
             // Calcul du vecteur de direction
             var rayDirection = Utility.RotateVector2(direction, fieldOfView / 2 - step * i);
@@ -56,7 +56,7 @@ public class PlayerVision2DScript : MonoBehaviour
 
             // Construction du mesh
             vertices[i + 1] = hit.collider is null ? rayDirection : (Vector2)transform.InverseTransformPoint(hit.point + rayDirection.normalized * obstaclePenetration);
-            if (i < precision - 2)
+            if (i < raycastCount - 2)
             {
                 triangles[i * 3] = 0;
                 triangles[i * 3 + 1] = i + 1;

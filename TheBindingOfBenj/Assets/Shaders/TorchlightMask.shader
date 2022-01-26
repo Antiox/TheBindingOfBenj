@@ -1,4 +1,4 @@
-Shader "Unlit/StencilMask"
+Shader "Custom/TorchlightMask"
 {
     Properties
     {

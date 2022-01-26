@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Obstacle
+  m_Name: Enemy
   m_Shader: {fileID: 4800000, guid: fa2cc8295a9e1f347bc188ebeb227630, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
