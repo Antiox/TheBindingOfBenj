@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +25,7 @@ namespace GameLibrary
 
         public void Start()
         {
+			MapManager.Instance.Start();
             EnemyManager.Instance.Start();
 
             EventManager.Instance.Dispatch(new OnEnemySpawnRequested(new Vector2(-10, 0), EnemyType.BasicEnemy1));
@@ -35,6 +36,7 @@ namespace GameLibrary
         public void Update()
         {
             EnemyManager.Instance.Update();
+            MapManager.Instance.Update();
         }
     }
 }
