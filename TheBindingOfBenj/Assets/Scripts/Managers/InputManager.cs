@@ -6,11 +6,11 @@ namespace GameLibrary
 {
     public class InputManager : MonoBehaviour
     {
-        public Vector2 move { get; private set; }
+        public Vector2 Move { get; private set; }
 
-        public Vector2 mouseDelta { get; private set; }
+        public Vector2 MousePosition { get; private set; }
 
-        public bool attack { get; private set; }
+        public bool Attack { get; private set; }
 
         private PlayerInput playerInput;
         private InputAction moveIA, mouseMoveIA, attackIA;
@@ -25,13 +25,13 @@ namespace GameLibrary
 
         private void OnEnable()
         {
-            moveIA.performed += Move => move = Move.ReadValue<Vector2>();
+            moveIA.performed += value => Move = value.ReadValue<Vector2>();
             moveIA.Enable();
 
-            mouseMoveIA.performed += MoveCamera => mouseDelta = MoveCamera.ReadValue<Vector2>();
+            mouseMoveIA.performed += value => MousePosition = value.ReadValue<Vector2>();
             mouseMoveIA.Enable();
 
-            attackIA.performed += Attack => attack = Attack.ReadValueAsButton();
+            attackIA.performed += value => Attack = value.ReadValueAsButton();
             attackIA.Enable();
         }
 

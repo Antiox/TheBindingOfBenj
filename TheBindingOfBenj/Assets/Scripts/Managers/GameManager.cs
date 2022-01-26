@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace GameLibrary
 {
-    public class GameManager : MonoBehaviour {
+    public class GameManager : MonoBehaviour
+    {
         #region Singleton
         private static GameManager instance;
         public static GameManager Instance
