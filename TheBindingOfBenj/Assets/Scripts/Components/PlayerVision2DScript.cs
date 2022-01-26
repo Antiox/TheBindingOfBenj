@@ -31,7 +31,7 @@ public class PlayerVision2DScript : MonoBehaviour
     void LateUpdate()
     {
         // Récupération de la position de la souris
-        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var mousePosition = Camera.main.ScreenToWorldPoint(Inputs.MousePosition);
         mousePosition.z = 0;
 
         // Calcul du vecteur de direction du joueur vers la souris

@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 
 namespace GameLibrary
 {
-    public class InputManager : MonoBehaviour
+    public class InputManagerScript : MonoBehaviour
     {
         public Vector2 Move { get; private set; }
-
         public Vector2 MousePosition { get; private set; }
-
         public bool Attack { get; private set; }
 
         private PlayerInput playerInput;
@@ -25,14 +24,23 @@ namespace GameLibrary
 
         private void OnEnable()
         {
-            moveIA.performed += value => Move = value.ReadValue<Vector2>();
+            moveIA.performed += InputReceived;
+            mouseMoveIA.performed += InputReceived;
+            attackIA.performed += InputReceived;
+
             moveIA.Enable();
-
-            mouseMoveIA.performed += value => MousePosition = value.ReadValue<Vector2>();
             mouseMoveIA.Enable();
-
-            attackIA.performed += value => Attack = value.ReadValueAsButton();
             attackIA.Enable();
+        }
+
+        private void InputReceived(CallbackContext e)
+        {
+            switch (e.action.name)
+            {
+                case "MouseMove": EventManager.Instance.Dispatch(new OnMouseMoved(e.ReadValue<Vector2>())); break;
+                case "Move": EventManager.Instance.Dispatch(new OnPlayerMoved(e.ReadValue<Vector2>())); break;
+                case "Attack": EventManager.Instance.Dispatch(new OnPlayerAttacked(e.ReadValueAsButton())); break;
+            }
         }
 
         private void OnDisable()
@@ -41,6 +49,5 @@ namespace GameLibrary
             mouseMoveIA.Disable();
             attackIA.Disable();
         }
-
     }
 }

@@ -6,23 +6,12 @@ namespace GameLibrary
 {
     public class PlayerCombat : Entity
     {
-        private InputManager _inputManager;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            _inputManager = GameObject.Find("InputManager").GetComponent<InputManager>();
-
-        }
-
         protected override void Update()
         {
             base.Update();
-            var attack = _inputManager.Attack;
-
-            if (attack)
+            if (Inputs.Attack)
             {
-                Attack(_inputManager.MousePosition);
+                Attack(Inputs.MousePosition);
             }
         }
     }

@@ -25,6 +25,7 @@ namespace GameLibrary
 
         public void Start()
         {
+            Inputs.Start();
 			MapManager.Instance.Start();
             EnemyManager.Instance.Start();
 

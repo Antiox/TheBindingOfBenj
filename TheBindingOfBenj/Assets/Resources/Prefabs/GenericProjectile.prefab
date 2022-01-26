@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7779243507261480065}
   - component: {fileID: 7779243507261480076}
   - component: {fileID: 7779243507261480067}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GenericProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: dff37dd648daba743a763211ef09ee62, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
