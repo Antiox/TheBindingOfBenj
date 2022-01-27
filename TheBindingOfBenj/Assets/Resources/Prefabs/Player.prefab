@@ -11,13 +11,14 @@ GameObject:
   - component: {fileID: 5619080885673228930}
   - component: {fileID: 5619080885673228933}
   - component: {fileID: 5619080885673228931}
-  - component: {fileID: 5619080885673228932}
   - component: {fileID: 5619080885673228935}
   - component: {fileID: 5619080885673228937}
   - component: {fileID: 5619080885673228934}
+  - component: {fileID: 1183505447}
+  - component: {fileID: 1183505448}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,19 +76,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &5619080885673228932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5619080885673228928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: caf08e59ac077344e85fc947d3c436b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementSpeed: 20
 --- !u!114 &5619080885673228935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,7 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fieldOfView: 110
-  precision: 1000
+  raycastCount: 1000
   viewDistance: 40
   obstaclePenetration: 0.4
   ignoreMask:
@@ -156,6 +144,36 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1183505447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5619080885673228928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f03c71f2c23d2df438a992e829569845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxVelocity: 6
+  _speed: 50
+--- !u!114 &1183505448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5619080885673228928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40f7e3525e8db5f4aace8aaa499fed0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _equipedWeapon: {fileID: 11400000, guid: 5d821506537841f42b40ab0d1ae695f5, type: 2}
+  _enemyMask:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &5619080885934524944
 GameObject:
   m_ObjectHideFlags: 0

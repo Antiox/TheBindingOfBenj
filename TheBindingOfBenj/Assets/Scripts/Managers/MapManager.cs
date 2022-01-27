@@ -55,7 +55,7 @@ namespace GameLibrary
                     GameObject roomPrefab = Resources.Load<GameObject>("Prefabs/Room");
                     RoomScript roomScript = roomPrefab.GetComponent<RoomScript>();
 
-                    GameObject room = Object.Instantiate(roomPrefab, new Vector3(i * roomScript.Size.x, j * roomScript.Size.y, 1), Quaternion.identity, _roomContainer.transform);
+                    GameObject room = Object.Instantiate(roomPrefab, new Vector3(i * roomScript.Size.x, j * roomScript.Size.y, roomPrefab.transform.position.z), Quaternion.identity, _roomContainer.transform);
 
                     _map[i, j] = room.GetComponent<RoomScript>();
                     _map[i, j].Coordinates = new Vector2(i, j);
@@ -66,6 +66,9 @@ namespace GameLibrary
             // place un point aléatoire pour le spawn du joueur
             // uniquement sur les aretes
             _specialRooms.Add("SpawnRoom", _map.Get(RandomPossibleCoordinates(IsOnEdge)));
+
+            var worldPos = _specialRooms["SpawnRoom"].Coordinates * _specialRooms["SpawnRoom"].Size;
+            EventManager.Instance.Dispatch(new OnPlayerSpawnRequested(worldPos));
 
             // place un point aléatoire pour la salle de boss
             // uniquement sur le coté opposé au spawn
