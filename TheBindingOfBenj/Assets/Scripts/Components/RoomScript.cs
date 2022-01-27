@@ -64,7 +64,6 @@ namespace GameLibrary
 
         private void Update()
         {
-            GetComponentInChildren<Text>().text = GCost.ToString() + " " + HCost;
         }
 
         public void OpenDoors(DoorType type)
