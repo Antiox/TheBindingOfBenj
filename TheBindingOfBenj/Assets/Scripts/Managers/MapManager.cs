@@ -69,6 +69,7 @@ namespace GameLibrary
 
             var worldPos = _specialRooms["SpawnRoom"].Coordinates * _specialRooms["SpawnRoom"].Size;
             EventManager.Instance.Dispatch(new OnPlayerSpawnRequested(worldPos));
+            EventManager.Instance.Dispatch(new OnPlayerRoomChanged(worldPos));
 
             // place un point aléatoire pour la salle de boss
             // uniquement sur le coté opposé au spawn
@@ -171,10 +172,10 @@ namespace GameLibrary
             {
                 for (int j = 0; j < _rowCount; j++)
                 {
-                    if (i > 0) _map[i, j].AddNeighbour(_map[i - 1, j]);
-                    if (i < _columnCount - 1) _map[i, j].AddNeighbour(_map[i + 1, j]);
-                    if (j > 0) _map[i, j].AddNeighbour(_map[i, j - 1]);
-                    if (j < _rowCount - 1) _map[i, j].AddNeighbour(_map[i, j + 1]);
+                    if (i > 0) _map[i, j].AddNeighbour("Left", _map[i - 1, j]);
+                    if (i < _columnCount - 1) _map[i, j].AddNeighbour("Right", _map[i + 1, j]);
+                    if (j > 0) _map[i, j].AddNeighbour("Down", _map[i, j - 1]);
+                    if (j < _rowCount - 1) _map[i, j].AddNeighbour("Up", _map[i, j + 1]);
                 }
             }
         }
@@ -217,8 +218,9 @@ namespace GameLibrary
                 closedSet.Add(n);
 
                 // développer n en générant tous ses successeurs
-                foreach (var neighbour in n.Neighbours)
+                foreach (var keyValue in n.Neighbours)
                 {
+                    var neighbour = keyValue.Value;
                     // si le noeud est le noeud but
                     if (n != to)
                     {
@@ -253,7 +255,7 @@ namespace GameLibrary
                                 {
                                     if (!currentNode.Parent.Type.HasFlag(RoomType.Boss | RoomType.Spawn))
                                     {
-                                        currentNeighbour.Weight += 5;
+                                        currentNeighbour.Value.Weight += 5;
                                     }
                                 }
 

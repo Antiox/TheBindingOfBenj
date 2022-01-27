@@ -35,5 +35,38 @@ namespace GameLibrary
 
             _rb.velocity = Vector2.ClampMagnitude(_rb.velocity, _maxVelocity);
         }
+
+
+        private void OnTriggerEnter2D(Collider2D collider)
+        {
+            if (collider.gameObject.tag == "Door")
+            {
+                var room = collider.gameObject.transform.parent.parent.GetComponent<RoomScript>();
+
+                // à revoir
+                switch (collider.name)
+                {
+                    case "UW_Door":
+                        transform.position = collider.transform.position + Vector3.up * 2;
+                        room = room.Neighbours["Up"];
+                        break;
+                    case "RW_Door":
+                        transform.position = collider.transform.position + Vector3.right * 2;
+                        room = room.Neighbours["Right"];
+                        break;
+                    case "DW_Door":
+                        transform.position = collider.transform.position + Vector3.down * 2;
+                        room = room.Neighbours["Down"];
+                        break;
+                    case "LW_Door":
+                        transform.position = collider.transform.position + Vector3.left * 2;
+                        room = room.Neighbours["Left"];
+                        break;
+                    default:
+                        break;
+                }
+                EventManager.Instance.Dispatch(new OnPlayerRoomChanged(new Vector2(room.Coordinates.x * room.Size.x, room.Coordinates.y * room.Size.y)));
+            }
+        }
     }
 }

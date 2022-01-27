@@ -15,7 +15,6 @@ namespace GameLibrary
 
         private void Update()
         {
-            Debug.Log("je vais vers " + transform.up);
             transform.position = Vector2.MoveTowards(transform.position, transform.position + transform.up, Projectile.Speed * Time.deltaTime);
         }
     }

@@ -55,8 +55,6 @@ namespace GameLibrary
                     angle -= 90f;
                     projectilePrefab.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-                    Debug.Log("pos clic : " + posScreen + "  ma pos : " + transform.position + " rota proj : " + projectilePrefab.transform.rotation);
-
                     projectilePrefab.GetComponent<ProjectileScript>().Projectile = _equipedWeapon.Projectile;
                 }
                 _timeSinceLastAttack = 0;

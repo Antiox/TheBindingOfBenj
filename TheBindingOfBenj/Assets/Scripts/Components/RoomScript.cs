@@ -22,7 +22,7 @@ namespace GameLibrary
         public float HCost { get; set; }
 
         // salles voisines
-        public List<RoomScript> Neighbours { get; private set; }
+        public Dictionary<string, RoomScript> Neighbours { get; private set; }
 
         /// <summary>
         /// Utilisé pour le backtracking de l'algo A* pour connecter les salles
@@ -59,7 +59,7 @@ namespace GameLibrary
             HCost = 0;
             Weight = 1;
             Type = RoomType.Normal;
-            Neighbours = new List<RoomScript>();
+            Neighbours = new Dictionary<string, RoomScript>();
         }
 
         private void Update()
@@ -67,6 +67,17 @@ namespace GameLibrary
         }
 
         public void OpenDoors(DoorType type)
+        {
+            if (type.HasFlag(DoorType.Up)) OpenCloseDoor(UpDoor, true);
+
+            if (type.HasFlag(DoorType.Right)) OpenCloseDoor(RightDoor, true);
+
+            if (type.HasFlag(DoorType.Down)) OpenCloseDoor(DownDoor, true);
+
+            if (type.HasFlag(DoorType.Left)) OpenCloseDoor(LeftDoor, true);
+        }
+        
+        public void CloseDoors(DoorType type)
         {
             if (type.HasFlag(DoorType.Up))
                 UpDoor.SetActive(false);
@@ -90,9 +101,23 @@ namespace GameLibrary
             }
         }
 
-        public void AddNeighbour(RoomScript room)
+        public void AddNeighbour(string name, RoomScript room)
         {
-            Neighbours.Add(room);
+            Neighbours.Add(name, room);
+        }
+
+        private void OpenCloseDoor(GameObject door, bool openClose)
+        {
+            door.GetComponent<BoxCollider2D>().isTrigger = true && openClose;
+            door.GetComponent<SpriteRenderer>().enabled = false && openClose;
+            if (openClose)
+            {
+
+            }
+                //door.GetComponent<SpriteRenderer>().material = ;
+            else
+                door.GetComponent<SpriteRenderer>().material = Resources.Load("Materials/Obstacle", typeof(Material)) as Material;
+
         }
 
     }
