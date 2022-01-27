@@ -38,7 +38,7 @@ namespace GameLibrary
             get
             {
                 // 10.6f taille de la prefab de base
-                return new Vector2(10.6f * transform.localScale.x, 10.6f * transform.localScale.y);
+                return new Vector2(20f * transform.localScale.x, 10f * transform.localScale.y);
             }
         }
 

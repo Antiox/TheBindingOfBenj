@@ -47,19 +47,19 @@ namespace GameLibrary
                 switch (collider.name)
                 {
                     case "UW_Door":
-                        transform.position = collider.transform.position + Vector3.up * 3;
+                        transform.position = collider.transform.position + Vector3.up * 6;
                         room = room.Neighbours["Up"];
                         break;
                     case "RW_Door":
-                        transform.position = collider.transform.position + Vector3.right * 3;
+                        transform.position = collider.transform.position + Vector3.right * 6;
                         room = room.Neighbours["Right"];
                         break;
                     case "DW_Door":
-                        transform.position = collider.transform.position + Vector3.down * 3;
+                        transform.position = collider.transform.position + Vector3.down * 6;
                         room = room.Neighbours["Down"];
                         break;
                     case "LW_Door":
-                        transform.position = collider.transform.position + Vector3.left * 3;
+                        transform.position = collider.transform.position + Vector3.left * 6;
                         room = room.Neighbours["Left"];
                         break;
                     default:

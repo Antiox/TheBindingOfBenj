@@ -52,10 +52,10 @@ namespace GameLibrary
             {
                 for (int j = 0; j < _rowCount; j++)
                 {
-                    GameObject roomPrefab = Resources.Load<GameObject>("Prefabs/Room");
-                    RoomScript roomScript = roomPrefab.GetComponent<RoomScript>();
+                    var roomPrefab = Resources.Load<GameObject>("Prefabs/Room");
+                    var roomScript = roomPrefab.GetComponent<RoomScript>();
 
-                    GameObject room = Object.Instantiate(roomPrefab, new Vector3(i * roomScript.Size.x, j * roomScript.Size.y, roomPrefab.transform.position.z), Quaternion.identity, _roomContainer.transform);
+                    var room = Object.Instantiate(roomPrefab, new Vector3(i * roomScript.Size.x, j * roomScript.Size.y, roomPrefab.transform.position.z), Quaternion.identity, _roomContainer.transform);
 
                     _map[i, j] = room.GetComponent<RoomScript>();
                     _map[i, j].Coordinates = new Vector2(i, j);
