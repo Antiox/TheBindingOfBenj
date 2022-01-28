@@ -75,9 +75,9 @@ namespace GameLibrary
             // uniquement sur le coté opposé au spawn
             _specialRooms.Add("BossRoom", _map.Get(RandomPossibleCoordinates(OnOppositeSide)));
 
-            _specialRooms.Add("OtherRoom1", _map.Get(RandomPossibleCoordinates(AwayFromBossRoom)));
+            _specialRooms.Add("OtherRoom1", _map.Get(RandomPossibleCoordinates(AwayFromOtherRooms)));
 
-            _specialRooms.Add("OtherRoom2", _map.Get(RandomPossibleCoordinates(AwayFromBossRoom)));
+            _specialRooms.Add("OtherRoom2", _map.Get(RandomPossibleCoordinates(AwayFromOtherRooms)));
 
             /// debug
             foreach (KeyValuePair<string, RoomScript> item in _specialRooms)
@@ -92,6 +92,18 @@ namespace GameLibrary
             ConnectRoomsAStar(_specialRooms["SpawnRoom"], _specialRooms["BossRoom"]);
             ConnectRoomsAStar(_specialRooms["OtherRoom1"], _specialRooms["SpawnRoom"]);
             ConnectRoomsAStar(_specialRooms["OtherRoom2"], _specialRooms["SpawnRoom"]);
+
+
+            // place des obstacles
+            var obstacles = Resources.LoadAll("Prefabs/Obstacles");
+
+            foreach (var room in _map)
+            {
+                if (Random.Range(0, 4) == 0) 
+                    Object.Instantiate(obstacles[Random.Range(0, obstacles.Length)],
+                        new Vector3(room.Coordinates.x * room.Size.x, room.Coordinates.y * room.Size.y, 0), Quaternion.identity);
+            }
+
         }
 
         /// <summary>
@@ -153,14 +165,21 @@ namespace GameLibrary
         }
 
         /// <summary>
-        /// Utilisé comme prédicat pour dire si le vector2 en paramètre est à au moins une salle de celle du boss
+        /// Utilisé comme prédicat pour dire si le vector2 en paramètre est à au moins une salle d'une autre
         /// et on ne la place pas sur un salle déjà utilisée
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        private bool AwayFromBossRoom(Vector2 vector)
+        private bool AwayFromOtherRooms(Vector2 vector)
         {
-            return Vector2.Distance(vector, _specialRooms["BossRoom"].Coordinates) > 1 && !_specialRooms.ContainsValue(_map.Get(vector));
+            var res = true;
+
+            foreach (var room in _specialRooms)
+            {
+                if (Vector2.Distance(vector, room.Value.Coordinates) <= 2) res = false;
+            }
+
+            return res && !_specialRooms.ContainsValue(_map.Get(vector));
         }
 
         /// <summary>
