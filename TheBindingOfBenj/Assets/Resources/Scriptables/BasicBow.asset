@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 1
   Damage: 8
-  Cooldown: 1.5
+  Cooldown: 0.2
   Range: 10
   Projectile: {fileID: 11400000, guid: 27dbdd137cde9b442be4f56258c306e7, type: 2}

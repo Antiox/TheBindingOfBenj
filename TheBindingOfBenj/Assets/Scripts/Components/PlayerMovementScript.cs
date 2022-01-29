@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameLibrary
 {
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerMovementScript : MonoBehaviour
     {
         private Rigidbody2D _rb;
 
@@ -47,19 +47,19 @@ namespace GameLibrary
                 switch (collider.name)
                 {
                     case "UW_Door":
-                        transform.position = collider.transform.position + Vector3.up * 6;
+                        transform.position = collider.transform.position + Vector3.up * 4;
                         room = room.Neighbours["Up"];
                         break;
                     case "RW_Door":
-                        transform.position = collider.transform.position + Vector3.right * 6;
+                        transform.position = collider.transform.position + Vector3.right * 4;
                         room = room.Neighbours["Right"];
                         break;
                     case "DW_Door":
-                        transform.position = collider.transform.position + Vector3.down * 6;
+                        transform.position = collider.transform.position + Vector3.down * 4;
                         room = room.Neighbours["Down"];
                         break;
                     case "LW_Door":
-                        transform.position = collider.transform.position + Vector3.left * 6;
+                        transform.position = collider.transform.position + Vector3.left * 4;
                         room = room.Neighbours["Left"];
                         break;
                     default:

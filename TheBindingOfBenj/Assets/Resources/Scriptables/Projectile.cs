@@ -22,5 +22,7 @@ namespace GameLibrary
         /// longueur du projectile
         /// </summary>
         public float Length;
+
+        public float Duration;
     }
 }

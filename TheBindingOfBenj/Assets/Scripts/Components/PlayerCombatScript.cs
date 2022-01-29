@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameLibrary
 {
-    public class PlayerCombat : Entity
+    public class PlayerCombatScript : Entity
     {
         protected override void Update()
         {

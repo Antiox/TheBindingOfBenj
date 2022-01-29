@@ -8,7 +8,7 @@ namespace GameLibrary
     public class Enemy : ScriptableObject
     {
         public Sprite artwork;
-        public int Health;
+        public float Health;
         public bool IsFlying;
 
         [HideInInspector]

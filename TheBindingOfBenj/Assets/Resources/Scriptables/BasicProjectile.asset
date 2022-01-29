@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0d462f7dc1becf46b7ea157bc7e02d9, type: 3}
   m_Name: BasicProjectile
   m_EditorClassIdentifier: 
-  Speed: 9
+  Speed: 30
   Radius: 0.2
   Length: 0.4
+  Duration: 5

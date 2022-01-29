@@ -47,15 +47,7 @@ namespace GameLibrary
                 {
                     var posScreen = Camera.main.ScreenToWorldPoint(pos);
                     posScreen.z = transform.position.z;
-
-                    var projectilePrefab = Instantiate(Resources.Load("Prefabs/GenericProjectile"), (posScreen - transform.position).normalized * 1.2f, Quaternion.identity, GameObject.Find("Projectiles").transform) as GameObject;
-
-                    var vectorToTarget = posScreen - transform.position;
-                    float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
-                    angle -= 90f;
-                    projectilePrefab.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
-                    projectilePrefab.GetComponent<ProjectileScript>().Projectile = _equipedWeapon.Projectile;
+                    EventManager.Instance.Dispatch(new OnProjectileSpawnRequested(_equipedWeapon.Projectile, transform.position, posScreen));
                 }
                 _timeSinceLastAttack = 0;
             }

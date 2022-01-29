@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7779243507261480065}
   - component: {fileID: 7779243507261480076}
   - component: {fileID: 7779243507261480067}
+  - component: {fileID: 6559537451774438060}
   m_Layer: 6
   m_Name: GenericProjectile
   m_TagString: Untagged
@@ -94,7 +95,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -112,3 +113,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2bd819fde98b29428842ba639a81c1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &6559537451774438060
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7779243507261480064}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
