@@ -101,9 +101,9 @@ namespace GameLibrary
 
             foreach (var room in _map)
             {
-                if (Random.Range(0, 4) == 0) 
+                if (Random.Range(0, 4) == 0 && room.Type != RoomType.Spawn && room.Type != RoomType.Boss) 
                     Object.Instantiate(obstacles[Random.Range(0, obstacles.Length)],
-                        new Vector3(room.Coordinates.x * room.Size.x, room.Coordinates.y * room.Size.y, 0), Quaternion.identity);
+                        new Vector3(room.Coordinates.x * room.Size.x, room.Coordinates.y * room.Size.y, 0), Quaternion.identity, GameObject.Find("Obstacles").transform);
             }
 
         }
