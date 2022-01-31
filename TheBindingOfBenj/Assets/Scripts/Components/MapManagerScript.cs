@@ -33,7 +33,6 @@ public class MapManagerScript : MonoBehaviour
             // spawn des nouveaux ennemis
             EventManager.Instance.Dispatch(new OnEnemySpawnRequested(worldPosRoom, EnemyType.BasicEnemy1));
             EventManager.Instance.Dispatch(new OnEnemySpawnRequested(worldPosRoom, EnemyType.BasicEnemy2));
-            EventManager.Instance.Dispatch(new OnEnemySpawnRequested(worldPosRoom, EnemyType.BasicEnemy3));
             e.Room.SpawnedEnemies = true;
 
             // blocage des portes
