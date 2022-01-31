@@ -4,7 +4,8 @@ using UnityEngine;
 namespace GameLibrary
 {
     [System.Flags]
-    public enum RoomType {
+    public enum RoomType
+    {
         Normal = 0,
         Boss = 1,
         Spawn = 2,

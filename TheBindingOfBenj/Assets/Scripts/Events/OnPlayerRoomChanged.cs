@@ -4,11 +4,11 @@ namespace GameLibrary
 {
     class OnPlayerRoomChanged : IGameEvent
     {
-        public Vector2 Position { get; set; }
+        public RoomScript Room { get; set; }
 
-        public OnPlayerRoomChanged(Vector2 position)
+        public OnPlayerRoomChanged(RoomScript room)
         {
-            Position = position;
+            Room = room;
         }
     }
 }

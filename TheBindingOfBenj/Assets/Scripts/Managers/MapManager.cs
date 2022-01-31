@@ -66,14 +66,16 @@ namespace GameLibrary
             // place un point aléatoire pour le spawn du joueur
             // uniquement sur les aretes
             _specialRooms.Add("SpawnRoom", _map.Get(RandomPossibleCoordinates(IsOnEdge)));
+            _specialRooms["SpawnRoom"].Type = RoomType.Spawn;
 
             var worldPos = _specialRooms["SpawnRoom"].Coordinates * _specialRooms["SpawnRoom"].Size;
             EventManager.Instance.Dispatch(new OnPlayerSpawnRequested(worldPos));
-            EventManager.Instance.Dispatch(new OnPlayerRoomChanged(worldPos));
+            EventManager.Instance.Dispatch(new OnPlayerRoomChanged(_specialRooms["SpawnRoom"]));
 
             // place un point aléatoire pour la salle de boss
             // uniquement sur le coté opposé au spawn
             _specialRooms.Add("BossRoom", _map.Get(RandomPossibleCoordinates(OnOppositeSide)));
+            _specialRooms["BossRoom"].Type = RoomType.Boss;
 
             _specialRooms.Add("OtherRoom1", _map.Get(RandomPossibleCoordinates(AwayFromOtherRooms)));
 
@@ -302,10 +304,12 @@ namespace GameLibrary
                                     doorsToOpenParent |= DoorType.Down;
                                 }
 
-                                currentNode.Parent.OpenDoors(doorsToOpenParent);
+                                currentNode.Parent.OpenCloseDoors(doorsToOpenParent, true);
+                                currentNode.Parent.OpenedDoors |= doorsToOpenParent;
                             }
 
-                            currentNode.OpenDoors(doorsToOpen);
+                            currentNode.OpenCloseDoors(doorsToOpen, true);
+                            currentNode.OpenedDoors |= doorsToOpen;
 
                             currentNode = currentNode.Parent;
                         }

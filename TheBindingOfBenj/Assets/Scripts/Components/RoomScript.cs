@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 namespace GameLibrary
 {
-    public class RoomScript : MonoBehaviour {
+    public class RoomScript : MonoBehaviour
+    {
         // coordonnées sur la map
         public Vector2 Coordinates { get; set; }
 
@@ -29,6 +30,16 @@ namespace GameLibrary
         /// </summary>
         public RoomScript Parent { get; set; }
 
+        /// <summary>
+        /// Indique si la salle a déjà spawn des ennemis
+        /// </summary>
+        public bool SpawnedEnemies { get; set; }
+
+        /// <summary>
+        /// Indique les portes à bloquer lors du spawn d'ennemis et les réouvre ensuite
+        /// </summary>
+        public DoorType OpenedDoors { get; set; }
+
 
         /// <summary>
         /// Indique la largeur et hauteur de la salle
@@ -51,46 +62,46 @@ namespace GameLibrary
 
         void Awake()
         {
+            Type = RoomType.Normal;
+            Weight = 1;
+            GCost = 10000;
+            HCost = 0;
+            Neighbours = new Dictionary<string, RoomScript>();
+            SpawnedEnemies = false;
+            OpenedDoors = DoorType.None;
             UpDoor = transform.GetChild(0).GetChild(2).gameObject;
             RightDoor = transform.GetChild(1).GetChild(2).gameObject;
             DownDoor = transform.GetChild(2).GetChild(2).gameObject;
             LeftDoor = transform.GetChild(3).GetChild(2).gameObject;
-            GCost = 10000;
-            HCost = 0;
-            Weight = 1;
-            Type = RoomType.Normal;
-            Neighbours = new Dictionary<string, RoomScript>();
         }
 
         private void Update()
         {
         }
 
-        public void OpenDoors(DoorType type)
+        /// <summary>
+        /// ouvre ou ferme les portes de la salle selon le bool
+        /// false = ferme, true = ouvre
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="openOrClose"></param>
+        public void OpenCloseDoors(DoorType type, bool openOrClose)
         {
-            if (type.HasFlag(DoorType.Up)) OpenCloseDoor(UpDoor, true);
+            if (type.HasFlag(DoorType.Up)) OpenCloseDoor(UpDoor);
+            if (type.HasFlag(DoorType.Right)) OpenCloseDoor(RightDoor);
+            if (type.HasFlag(DoorType.Down)) OpenCloseDoor(DownDoor);
+            if (type.HasFlag(DoorType.Left)) OpenCloseDoor(LeftDoor);
 
-            if (type.HasFlag(DoorType.Right)) OpenCloseDoor(RightDoor, true);
+            void OpenCloseDoor(GameObject door)
+            {
+                door.GetComponent<BoxCollider2D>().isTrigger = openOrClose;
+                door.GetComponent<SpriteRenderer>().enabled = !openOrClose;
 
-            if (type.HasFlag(DoorType.Down)) OpenCloseDoor(DownDoor, true);
-
-            if (type.HasFlag(DoorType.Left)) OpenCloseDoor(LeftDoor, true);
+                if (!openOrClose)
+                    door.GetComponent<SpriteRenderer>().material = Resources.Load("Materials/Obstacle", typeof(Material)) as Material;
+            }
         }
-        
-        public void CloseDoors(DoorType type)
-        {
-            if (type.HasFlag(DoorType.Up))
-                UpDoor.SetActive(false);
 
-            if (type.HasFlag(DoorType.Right))
-                RightDoor.SetActive(false);
-
-            if (type.HasFlag(DoorType.Down))
-                DownDoor.SetActive(false);
-
-            if (type.HasFlag(DoorType.Left))
-                LeftDoor.SetActive(false);
-        }
 
         public void ChangeColor(Color color)
         {
@@ -105,20 +116,5 @@ namespace GameLibrary
         {
             Neighbours.Add(name, room);
         }
-
-        private void OpenCloseDoor(GameObject door, bool openClose)
-        {
-            door.GetComponent<BoxCollider2D>().isTrigger = true && openClose;
-            door.GetComponent<SpriteRenderer>().enabled = false && openClose;
-            if (openClose)
-            {
-
-            }
-                //door.GetComponent<SpriteRenderer>().material = ;
-            else
-                door.GetComponent<SpriteRenderer>().material = Resources.Load("Materials/Obstacle", typeof(Material)) as Material;
-
-        }
-
     }
 }

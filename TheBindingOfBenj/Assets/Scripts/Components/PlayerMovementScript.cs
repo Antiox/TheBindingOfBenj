@@ -9,7 +9,7 @@ namespace GameLibrary
         private Rigidbody2D _rb;
 
         [SerializeField] private float _maxVelocity;
-        [SerializeField] private float _speed;
+        [SerializeField] private float _acceleration;
 
         private void Awake()
         {
@@ -28,7 +28,7 @@ namespace GameLibrary
 
         private void FixedUpdate()
         {
-            _rb.AddForce(Inputs.PlayerDirection * _speed);
+            _rb.AddForce(Inputs.PlayerDirection * _acceleration);
 
             if (Inputs.PlayerDirection.magnitude == 0)
                 _rb.velocity *= 0.9f;
@@ -65,7 +65,7 @@ namespace GameLibrary
                     default:
                         break;
                 }
-                EventManager.Instance.Dispatch(new OnPlayerRoomChanged(new Vector2(room.Coordinates.x * room.Size.x, room.Coordinates.y * room.Size.y)));
+                EventManager.Instance.Dispatch(new OnPlayerRoomChanged(room));
             }
         }
     }

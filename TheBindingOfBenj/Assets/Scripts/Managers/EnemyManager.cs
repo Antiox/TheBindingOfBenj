@@ -75,6 +75,8 @@ namespace GameLibrary
             _enemies.Remove(e.Enemy);
             Object.Destroy(e.Enemy);
             Object.Destroy(particles, 2f);
+
+            if (_enemies.Count == 0) EventManager.Instance.Dispatch(new OnAllEnemiesKilled());
         }
     }
 }

@@ -28,10 +28,6 @@ namespace GameLibrary
             Inputs.Start();
 			MapManager.Instance.Start();
             EnemyManager.Instance.Start();
-
-            EventManager.Instance.Dispatch(new OnEnemySpawnRequested(new Vector2(-10, 0), EnemyType.BasicEnemy1));
-            EventManager.Instance.Dispatch(new OnEnemySpawnRequested(new Vector2(10, 0), EnemyType.BasicEnemy2));
-            EventManager.Instance.Dispatch(new OnEnemySpawnRequested(new Vector2(0, 10), EnemyType.BasicEnemy3));
         }
 
         public void Update()
