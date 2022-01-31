@@ -24,5 +24,8 @@ namespace GameLibrary
         public float Length;
 
         public float Duration;
+
+        public List<AudioClip> EnemyImpact;
+        public List<AudioClip> WallImpact;
     }
 }

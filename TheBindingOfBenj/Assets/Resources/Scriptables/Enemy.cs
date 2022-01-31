@@ -13,5 +13,7 @@ namespace GameLibrary
 
         [HideInInspector]
         public IPattern pattern;
+
+        public GameObject Impact;
     }
 }

@@ -8,6 +8,8 @@ TagManager:
   - Door
   - Obstacles
   - Enemy
+  - Missile
+  - Projectile
   layers:
   - Default
   - TransparentFX

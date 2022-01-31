@@ -35,7 +35,6 @@ namespace GameLibrary
 
         public void Update()
         {
-
         }
 
         private void SpawnEnemy(Vector2 position, EnemyType type)
@@ -72,8 +71,10 @@ namespace GameLibrary
 
         private void EnemyDied(OnEnemyDied e)
         {
+            var particles = Object.Instantiate(Resources.Load("Prefabs/BloodExplosion2D"), e.Enemy.transform.position, Quaternion.identity) as GameObject;
             _enemies.Remove(e.Enemy);
             Object.Destroy(e.Enemy);
+            Object.Destroy(particles, 2f);
         }
     }
 }

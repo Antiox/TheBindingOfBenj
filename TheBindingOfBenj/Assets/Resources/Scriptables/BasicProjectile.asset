@@ -16,3 +16,23 @@ MonoBehaviour:
   Radius: 0.2
   Length: 0.4
   Duration: 5
+  EnemyImpact:
+  - {fileID: 8300000, guid: e4b7060943986e54783694b4e56f0369, type: 3}
+  - {fileID: 8300000, guid: ba9c84442f18dd14e89fc2c33771eb67, type: 3}
+  - {fileID: 8300000, guid: 66d6c3797659aea4ca6f8ec81704182f, type: 3}
+  - {fileID: 8300000, guid: 7ddcaa682eacb014b90d647aadff32b7, type: 3}
+  - {fileID: 8300000, guid: c4899f250328c414f90a2cd21652ff8c, type: 3}
+  - {fileID: 8300000, guid: 310a4b861862db44896157ba3193cf00, type: 3}
+  - {fileID: 8300000, guid: 93da34270376ef645bc30599852408cd, type: 3}
+  - {fileID: 8300000, guid: 3d58cbc77a37cfc47918409ca1eb96b6, type: 3}
+  - {fileID: 8300000, guid: 0c85a02a4ae77df4f88ec0acf858c0a9, type: 3}
+  - {fileID: 8300000, guid: e0c2f5a021349004290d420924df21d2, type: 3}
+  WallImpact:
+  - {fileID: 8300000, guid: 961af395224f37b4ca5acc4ff7829591, type: 3}
+  - {fileID: 8300000, guid: 9b591dad8e7575640ac823ebdfce5358, type: 3}
+  - {fileID: 8300000, guid: c78095ca42e155141ba780c4ae975769, type: 3}
+  - {fileID: 8300000, guid: e3425e55509c6cf4caebaed12f8cd845, type: 3}
+  - {fileID: 8300000, guid: 920ae80ddd3c85a4e8eda1812e4a6258, type: 3}
+  - {fileID: 8300000, guid: 12d1352a978e6334fb4eda7223276bbc, type: 3}
+  - {fileID: 8300000, guid: d75773a9ebf93b246a70d5773beba4fb, type: 3}
+  - {fileID: 8300000, guid: 1edbe3b7c6edacc43bf1b8e85b06a05e, type: 3}
