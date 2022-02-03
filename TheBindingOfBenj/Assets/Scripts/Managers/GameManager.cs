@@ -28,6 +28,7 @@ namespace GameLibrary
             Inputs.Start();
 			MapManager.Instance.Start();
             EnemyManager.Instance.Start();
+            ProjectileManager.Instance.Start();
         }
 
         public void Update()

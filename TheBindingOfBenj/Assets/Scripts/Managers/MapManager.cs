@@ -78,8 +78,10 @@ namespace GameLibrary
             _specialRooms["BossRoom"].Type = RoomType.Boss;
 
             _specialRooms.Add("OtherRoom1", _map.Get(RandomPossibleCoordinates(AwayFromOtherRooms)));
+            _specialRooms["OtherRoom1"].Type = RoomType.Other;
 
             _specialRooms.Add("OtherRoom2", _map.Get(RandomPossibleCoordinates(AwayFromOtherRooms)));
+            _specialRooms["OtherRoom2"].Type = RoomType.Other;
 
             /// debug
             foreach (KeyValuePair<string, RoomScript> item in _specialRooms)
@@ -96,15 +98,27 @@ namespace GameLibrary
             ConnectRoomsAStar(_specialRooms["OtherRoom2"], _specialRooms["SpawnRoom"]);
 
 
-            // place des obstacles
+            
             var obstacles = Resources.LoadAll("Prefabs/Obstacles");
+            var weapons = Resources.LoadAll<Weapon>("Scriptables");
 
             foreach (var room in _map)
             {
-                if (Random.Range(0, 3) == 0 && room.Type != RoomType.Spawn && room.Type != RoomType.Boss) 
-                    Object.Instantiate(obstacles[Random.Range(0, obstacles.Length)],
-                        new Vector3(room.Coordinates.x * room.Size.x, room.Coordinates.y * room.Size.y, 0), Quaternion.identity, GameObject.Find("Obstacles").transform);
+                var middlePointRoom = new Vector3(room.Coordinates.x * room.Size.x, room.Coordinates.y * room.Size.y, 0);
+                if (room.Type != RoomType.Spawn && room.Type != RoomType.Boss && room.Type != RoomType.Other)
+                {
+                    if (Random.Range(0, 3) == 0) // 1/3 d'avoir un obstacle dans la salle
+                        Object.Instantiate(obstacles[Random.Range(0, obstacles.Length)], middlePointRoom, Quaternion.identity, GameObject.Find("Obstacles").transform);
+                }
+                if (room.Type == RoomType.Other)
+                {
+                    var weapon = Object.Instantiate(Resources.Load("Prefabs/Weapon"), middlePointRoom, Quaternion.identity) as GameObject;
+                    weapon.GetComponent<WeaponGeneratorScript>().Weapon = weapons[Random.Range(0, weapons.Length)];
+                }
             }
+
+
+
 
         }
 

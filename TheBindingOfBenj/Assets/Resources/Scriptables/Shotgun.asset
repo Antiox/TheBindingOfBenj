@@ -9,13 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0d462f7dc1becf46b7ea157bc7e02d9, type: 3}
-  m_Name: BasicProjectile
+  m_Script: {fileID: 11500000, guid: c7fa1fabae5dfe24daad92db77a7363b, type: 3}
+  m_Name: Shotgun
   m_EditorClassIdentifier: 
-  Speed: 30
-  Radius: 0.2
-  Length: 0.4
+  WeaponType: 1
+  WeaponSprite: {fileID: 21300000, guid: c93b63870435bed4dac5f66d085deca7, type: 3}
+  Damage: 6
+  Cooldown: 1.3
+  Range: 0
+  RangedType: 1
+  Spread: 360
+  ProjectileCount: 164
+  Speed: 66.7
+  Radius: 1
+  Length: 1
   Duration: 5
+  ProjectileSprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
+  ProjectileType: 0
   EnemyImpact:
   - {fileID: 8300000, guid: e4b7060943986e54783694b4e56f0369, type: 3}
   - {fileID: 8300000, guid: ba9c84442f18dd14e89fc2c33771eb67, type: 3}

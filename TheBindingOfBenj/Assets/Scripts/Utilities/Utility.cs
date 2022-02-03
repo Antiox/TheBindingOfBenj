@@ -61,5 +61,18 @@ namespace GameLibrary
             var y = Random.Range(from, to);
             return new Vector2(x, y);
         }
-	}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="pivot"></param>
+        /// <param name="angles"></param>
+        /// <returns></returns>
+        public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
+        {
+            var dir = Quaternion.Euler(angles) * (point - pivot);
+            return dir + pivot;
+        }
+    }
 }

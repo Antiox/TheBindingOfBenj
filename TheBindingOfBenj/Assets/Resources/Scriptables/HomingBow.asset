@@ -10,19 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7fa1fabae5dfe24daad92db77a7363b, type: 3}
-  m_Name: BasicBow
+  m_Name: HomingBow
   m_EditorClassIdentifier: 
   WeaponType: 1
-  WeaponSprite: {fileID: 21300000, guid: 84ac232a4b1ce044793738e2b429ae0f, type: 3}
-  Damage: 2
-  Cooldown: 0.15
-  Range: 10
-  Speed: 100
+  WeaponSprite: {fileID: 21300000, guid: 8fbc381fe59f30a4c9d7e910fa0fb28d, type: 3}
+  Damage: 0.3
+  Cooldown: 0.04
+  Range: 0
+  RangedType: 0
+  Spread: 0
+  ProjectileCount: 0
+  Speed: 80
   Radius: 1
   Length: 1
   Duration: 5
   ProjectileSprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
-  ProjectileType: 0
+  ProjectileType: 1
+  HomingRadius: 5
   EnemyImpact:
   - {fileID: 8300000, guid: e4b7060943986e54783694b4e56f0369, type: 3}
   - {fileID: 8300000, guid: ba9c84442f18dd14e89fc2c33771eb67, type: 3}

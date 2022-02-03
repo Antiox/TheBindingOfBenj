@@ -233,7 +233,7 @@ Transform:
   m_LocalScale: {x: 500, y: 250, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &344330719
 GameObject:
@@ -247,7 +247,6 @@ GameObject:
   - component: {fileID: 344330720}
   - component: {fileID: 344330722}
   - component: {fileID: 344330724}
-  - component: {fileID: 344330725}
   - component: {fileID: 344330723}
   m_Layer: 0
   m_Name: GameManager
@@ -331,6 +330,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: cedb15e8-9886-454b-8f97-7e3c06d63a4c
     m_ActionName: Player/Attack[/Mouse/press]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9f935acf-128d-4889-bd0e-4b6933e1980d
+    m_ActionName: Player/WeaponChange[/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -346,18 +349,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16fe8ffa92e917340bb4afd46c32ce76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &344330725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 344330719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c34df28d481f11a44b3235958ea7389d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &519420028
@@ -677,7 +668,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2008229848
 GameObject:
