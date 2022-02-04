@@ -14,18 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponType: 1
   WeaponSprite: {fileID: 21300000, guid: c93b63870435bed4dac5f66d085deca7, type: 3}
-  Damage: 6
+  Damage: 1
   Cooldown: 1.3
   Range: 0
   RangedType: 1
-  Spread: 360
-  ProjectileCount: 164
-  Speed: 66.7
+  Spread: 30
+  ProjectileCount: 20
+  Speed: 90
   Radius: 1
   Length: 1
   Duration: 5
   ProjectileSprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
   ProjectileType: 0
+  HomingRadius: 0
   EnemyImpact:
   - {fileID: 8300000, guid: e4b7060943986e54783694b4e56f0369, type: 3}
   - {fileID: 8300000, guid: ba9c84442f18dd14e89fc2c33771eb67, type: 3}

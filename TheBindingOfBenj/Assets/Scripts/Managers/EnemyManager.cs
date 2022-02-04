@@ -58,6 +58,8 @@ namespace GameLibrary
                 case EnemyType.BasicEnemy1: return new GenericPattern(enemy, player);
                 case EnemyType.BasicEnemy2: return new GenericPattern2(enemy, player);
                 case EnemyType.BasicEnemy3: return new SpiningPattern(enemy, player);
+                case EnemyType.RandomTowards: return new RandomTowardsPlayerPattern(enemy, player);
+                case EnemyType.Teleport: return new TeleportPattern(enemy, player);
                 default: return new GenericPattern(enemy, player);
             }
         }

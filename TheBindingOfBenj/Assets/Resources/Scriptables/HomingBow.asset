@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HomingBow
   m_EditorClassIdentifier: 
   WeaponType: 1
-  WeaponSprite: {fileID: 21300000, guid: 8fbc381fe59f30a4c9d7e910fa0fb28d, type: 3}
+  WeaponSprite: {fileID: 21300000, guid: 203a9d4c90668e143ae60689523ec18d, type: 3}
   Damage: 0.3
   Cooldown: 0.04
   Range: 0

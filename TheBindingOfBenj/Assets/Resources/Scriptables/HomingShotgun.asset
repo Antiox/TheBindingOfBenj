@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: HomingShotgun
   m_EditorClassIdentifier: 
   WeaponType: 1
-  WeaponSprite: {fileID: 21300000, guid: c93b63870435bed4dac5f66d085deca7, type: 3}
+  WeaponSprite: {fileID: 21300000, guid: f50de359de2d6234890a58ada0114056, type: 3}
   Damage: 1.2
   Cooldown: 1
   Range: 0
   RangedType: 1
-  Spread: 91.73
+  Spread: 70
   ProjectileCount: 10
-  Speed: 62.69
+  Speed: 90
   Radius: 1
   Length: 1
   Duration: 5

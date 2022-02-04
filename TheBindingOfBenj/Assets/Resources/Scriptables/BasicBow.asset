@@ -13,16 +13,20 @@ MonoBehaviour:
   m_Name: BasicBow
   m_EditorClassIdentifier: 
   WeaponType: 1
-  WeaponSprite: {fileID: 21300000, guid: 84ac232a4b1ce044793738e2b429ae0f, type: 3}
+  WeaponSprite: {fileID: 21300000, guid: 68915d8b98a8cd54ead55418ae829300, type: 3}
   Damage: 2
   Cooldown: 0.15
   Range: 10
+  RangedType: 0
+  Spread: 0
+  ProjectileCount: 0
   Speed: 100
   Radius: 1
   Length: 1
   Duration: 5
   ProjectileSprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
   ProjectileType: 0
+  HomingRadius: 0
   EnemyImpact:
   - {fileID: 8300000, guid: e4b7060943986e54783694b4e56f0369, type: 3}
   - {fileID: 8300000, guid: ba9c84442f18dd14e89fc2c33771eb67, type: 3}

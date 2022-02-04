@@ -5,5 +5,7 @@
         BasicEnemy1,
         BasicEnemy2,
         BasicEnemy3,
+        RandomTowards,
+        Teleport
     }
 }
