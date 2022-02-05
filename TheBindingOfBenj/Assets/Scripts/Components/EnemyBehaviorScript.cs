@@ -33,13 +33,13 @@ public class EnemyBehaviorScript : MonoBehaviour
 
     private void EnemyHurt(OnEnemyHurt e)
     {
-        if (e.Enemy == gameObject)
+        if (e.GameObject == gameObject)
         {
             _health -= e.Damage;
             StartCoroutine(PlayHurtAnimation());
 
             if (_health <= 0)
-                EventManager.Instance.Dispatch(new OnEnemyDied(gameObject));
+                EventManager.Instance.Dispatch(new OnEnemyDied(e.GameObject, e.Enemy));
         }
     }
 

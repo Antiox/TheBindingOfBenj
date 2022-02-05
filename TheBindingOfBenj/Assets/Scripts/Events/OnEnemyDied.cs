@@ -9,10 +9,12 @@ namespace GameLibrary
 {
     public class OnEnemyDied : IGameEvent
     {
-        public GameObject Enemy { get; set; }
+        public GameObject GameObject { get; set; }
+        public Enemy Enemy{ get; set; }
 
-        public OnEnemyDied(GameObject enemy)
+        public OnEnemyDied(GameObject gameObject, Enemy enemy)
         {
+            GameObject = gameObject;
             Enemy = enemy;
         }
     }

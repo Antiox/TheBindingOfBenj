@@ -24,7 +24,8 @@ public class ProjectileBehaviourScript : MonoBehaviour
         // A rendre plus propre
         if (other.tag == Tags.Enemy)
         {
-            EventManager.Instance.Dispatch(new OnEnemyHurt(other.gameObject, Weapon.Damage));
+            var enemy = other.gameObject.GetComponent<EnemyGeneratorScript>().Enemy;
+            EventManager.Instance.Dispatch(new OnEnemyHurt(other.gameObject, enemy, Weapon.Damage));
             var angle = transform.rotation.eulerAngles.z + 180f;
             var particles = Instantiate(Resources.Load("Prefabs/Particles/BloodSplatDirectional2D"), transform.position, Quaternion.Euler(0, 0, angle)) as GameObject;
             AudioSource.PlayClipAtPoint(Weapon.EnemyImpact.GetRandom(), Camera.main.transform.position);

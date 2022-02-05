@@ -4,13 +4,15 @@ namespace GameLibrary
 {
     public class OnEnemyHurt : IGameEvent
     {
-        public GameObject Enemy { get; set; }
+        public GameObject GameObject { get; set; }
+        public Enemy Enemy { get; set; }
         public float Damage { get; set; }
 
-        public OnEnemyHurt(GameObject enemy, float damage)
+        public OnEnemyHurt(GameObject gameObject, Enemy enemy, float damage)
         {
-            Enemy = enemy;
+            GameObject = gameObject;
             Damage = damage;
+            Enemy = enemy;
         }
     }
 }

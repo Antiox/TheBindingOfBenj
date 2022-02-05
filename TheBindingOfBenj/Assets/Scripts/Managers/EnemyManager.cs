@@ -77,9 +77,11 @@ namespace GameLibrary
 
         private void EnemyDied(OnEnemyDied e)
         {
-            var particles = Object.Instantiate(Resources.Load("Prefabs/Particles/BloodExplosion2D"), e.Enemy.transform.position, Quaternion.identity) as GameObject;
-            _enemies.Remove(e.Enemy);
-            Object.Destroy(e.Enemy);
+            var particles = Object.Instantiate(Resources.Load("Prefabs/Particles/BloodExplosion2D"), e.GameObject.transform.position, Quaternion.identity) as GameObject;
+            AudioSource.PlayClipAtPoint(e.Enemy.DeathSound.GetRandom(), Camera.main.transform.position);
+
+            _enemies.Remove(e.GameObject);
+            Object.Destroy(e.GameObject);
             Object.Destroy(particles, 2f);
 
             if (_enemies.Count == 0) EventManager.Instance.Dispatch(new OnAllEnemiesKilled());

@@ -23,10 +23,13 @@ namespace GameLibrary
         private ProjectileManager() { }
         #endregion
 
+        public void Awake()
+        {
+            EventManager.Instance.AddListener<OnProjectileSpawnRequested>(ProjectileSpawnRequested);
+        }
 
         public void Start()
         {
-            EventManager.Instance.AddListener<OnProjectileSpawnRequested>(ProjectileSpawnRequested);
         }
 
         public void Update()

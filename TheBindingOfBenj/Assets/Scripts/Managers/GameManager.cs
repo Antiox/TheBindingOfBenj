@@ -31,6 +31,7 @@ namespace GameLibrary
             Inputs.Awake();
             MapManager.Instance.Awake();
             EnemyManager.Instance.Awake();
+            ProjectileManager.Instance.Awake();
 
             EventManager.Instance.AddListener<OnPlayerKilled>(PlayerKilled);
         }

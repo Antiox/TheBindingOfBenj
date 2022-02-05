@@ -16,8 +16,8 @@ namespace GameLibrary
         {
             while (true)
             {
-                var playerPosition = 3f * Vector3.Normalize(_player.transform.position - _enemy.transform.position) + _enemy.transform.position;
-                _enemy.transform.RotateAround(playerPosition, Vector3.forward, 180 * Time.deltaTime);
+                _enemy.transform.position = _player.transform.position + (_enemy.transform.position - _player.transform.position).normalized * 10f;
+                _enemy.transform.RotateAround(_player.transform.position, Vector3.forward, 90f * Time.deltaTime);
                 var q = _enemy.transform.rotation;
                 q.eulerAngles = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);
                 _enemy.transform.rotation = q;

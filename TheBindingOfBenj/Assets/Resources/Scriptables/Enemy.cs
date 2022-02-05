@@ -15,5 +15,7 @@ namespace GameLibrary
         public IPattern pattern;
 
         public GameObject Impact;
+
+        public List<AudioClip> DeathSound;
     }
 }

@@ -16,3 +16,6 @@ MonoBehaviour:
   Health: 30
   IsFlying: 0
   Impact: {fileID: 0}
+  DeathSound:
+  - {fileID: 8300000, guid: 8205643392935c54d99e90dc01467a12, type: 3}
+  - {fileID: 8300000, guid: 79d8b4a96b8657348bcf7ebe868a5fc7, type: 3}
