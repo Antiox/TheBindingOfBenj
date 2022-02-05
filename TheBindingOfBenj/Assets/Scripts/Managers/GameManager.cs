@@ -40,14 +40,11 @@ namespace GameLibrary
             Inputs.Start();
 			MapManager.Instance.Start();
             EnemyManager.Instance.Start();
-<<<<<<< HEAD
+            ProjectileManager.Instance.Start();
 
             InitializeGameStatus();
 
             EventManager.Instance.Dispatch(new OnGameStarted(_status));
-=======
-            ProjectileManager.Instance.Start();
->>>>>>> 7f5c9c73fb2c120d512e99888d8d229917b21ea2
         }
 
         public void Update()
