@@ -11,7 +11,12 @@ namespace GameLibrary
         /// <summary>
         /// type de l'arme (melee, ranged)
         /// </summary>
-        public WeaponType Type;
+        public WeaponType WeaponType;
+
+        /// <summary>
+        /// sprite de l'arme
+        /// </summary>
+        public Sprite WeaponSprite;
 
         /// <summary>
         /// dégats qu'inflige l'arme
@@ -28,12 +33,56 @@ namespace GameLibrary
         /// </summary>
         public float Range;
 
+        /// <summary>
+        /// type d'arme à distance
+        /// </summary>
+        public RangedType RangedType;
 
-        [Header("Only for ranged weapons")]
+        public float Spread;
+
+        public int ProjectileCount;
+
+
+        [Header("Projectile")]
 
         /// <summary>
-        /// prefab du projectile à lancer
+        /// Vitesse du projectile
         /// </summary>
-        public Projectile Projectile;
+        public float Speed;
+
+        /// <summary>
+        /// rayon du projectile
+        /// </summary>
+        public float Radius;
+
+        /// <summary>
+        /// longueur du projectile
+        /// </summary>
+        public float Length;
+
+        /// <summary>
+        /// durée max de vie du projectile
+        /// </summary>
+        public float Duration;
+
+        /// <summary>
+        /// sprite du projectile
+        /// </summary>
+        public Sprite ProjectileSprite;
+
+        /// <summary>
+        /// pattern de mouvement du projectile
+        /// </summary>
+        public IPattern Pattern;
+
+        /// <summary>
+        /// type du projectile
+        /// </summary>
+        public ProjectileType ProjectileType;
+
+        public float HomingRadius;
+
+        public List<AudioClip> EnemyImpact;
+        public List<AudioClip> WallImpact;
     }
 }

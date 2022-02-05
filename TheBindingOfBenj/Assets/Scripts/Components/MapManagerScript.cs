@@ -28,15 +28,20 @@ public class MapManagerScript : MonoBehaviour
         _currentRoom = e.Room;
 
 
-        if (!e.Room.SpawnedEnemies && e.Room.Type != RoomType.Boss && e.Room.Type != RoomType.Spawn)
+        if (!_currentRoom.SpawnedEnemies && _currentRoom.Type != RoomType.Boss && _currentRoom.Type != RoomType.Spawn)
         {
             // spawn des nouveaux ennemis
-            EventManager.Instance.Dispatch(new OnEnemySpawnRequested(worldPosRoom, EnemyType.BasicEnemy1));
-            EventManager.Instance.Dispatch(new OnEnemySpawnRequested(worldPosRoom, EnemyType.BasicEnemy2));
-            e.Room.SpawnedEnemies = true;
+            var possibleEnemies = (EnemyType[])System.Enum.GetValues(typeof(EnemyType));
+            for (int i = 0; i < Random.Range(0, possibleEnemies.Length); i++)
+            {
+                EventManager.Instance.Dispatch(new OnEnemySpawnRequested(worldPosRoom, possibleEnemies[Random.Range(0, possibleEnemies.Length)]));
+                _currentRoom.SpawnedEnemies = true;
+            }
 
             // blocage des portes
-            e.Room.OpenCloseDoors(e.Room.OpenedDoors, false);
+            if (_currentRoom.SpawnedEnemies)
+                _currentRoom.OpenCloseDoors(e.Room.OpenedDoors, false);
+
         }
     }
 

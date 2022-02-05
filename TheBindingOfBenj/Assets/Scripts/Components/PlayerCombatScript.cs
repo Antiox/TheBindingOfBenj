@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,5 +15,11 @@ namespace GameLibrary
                 Attack(Inputs.MousePosition);
             }
         }
+
+        public void ChangeWeapon(Weapon weapon)
+        {
+            _equipedWeapon = weapon;
+        }
+
     }
 }

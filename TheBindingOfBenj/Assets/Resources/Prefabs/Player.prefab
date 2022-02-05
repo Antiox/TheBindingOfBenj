@@ -1,35 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5558087152616355799
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5969271715045262136}
-  m_Layer: 0
-  m_Name: Projectiles
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5969271715045262136
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5558087152616355799}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5619080885673228930}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5619080885673228928
 GameObject:
   m_ObjectHideFlags: 0
@@ -46,7 +16,11 @@ GameObject:
   - component: {fileID: 5619080885673228934}
   - component: {fileID: 1183505447}
   - component: {fileID: 1183505448}
+<<<<<<< HEAD
   - component: {fileID: 6978369075493887054}
+=======
+  - component: {fileID: -6405131216432438351}
+>>>>>>> 7f5c9c73fb2c120d512e99888d8d229917b21ea2
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -67,7 +41,6 @@ Transform:
   m_Children:
   - {fileID: 5619080885934524947}
   - {fileID: 5619080886069384931}
-  - {fileID: 5969271715045262136}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -206,7 +179,11 @@ MonoBehaviour:
   _enemyMask:
     serializedVersion: 2
     m_Bits: 512
+<<<<<<< HEAD
 --- !u!114 &6978369075493887054
+=======
+--- !u!114 &-6405131216432438351
+>>>>>>> 7f5c9c73fb2c120d512e99888d8d229917b21ea2
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -215,7 +192,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5619080885673228928}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< HEAD
   m_Script: {fileID: 11500000, guid: b2d683dc971531c45b072efd186b708f, type: 3}
+=======
+  m_Script: {fileID: 11500000, guid: dfb978f1218984f49bcbe09f781e1bac, type: 3}
+>>>>>>> 7f5c9c73fb2c120d512e99888d8d229917b21ea2
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5619080885934524944
