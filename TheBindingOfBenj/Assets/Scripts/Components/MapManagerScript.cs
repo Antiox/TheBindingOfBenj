@@ -7,7 +7,7 @@ public class MapManagerScript : MonoBehaviour
 {
     private RoomScript _currentRoom;
 
-    private void Start()
+    private void Awake()
     {
         EventManager.Instance.AddListener<OnPlayerSpawnRequested>(SpawnPlayer);
         EventManager.Instance.AddListener<OnPlayerRoomChanged>(ChangeRoom);

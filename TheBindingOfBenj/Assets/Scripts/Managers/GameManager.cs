@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 namespace GameLibrary
 {
@@ -23,17 +23,47 @@ namespace GameLibrary
         private GameManager() { }
         #endregion
 
+        private GameStatus _status;
+
+
+        public void Awake()
+        {
+            Inputs.Awake();
+            MapManager.Instance.Awake();
+            EnemyManager.Instance.Awake();
+
+            EventManager.Instance.AddListener<OnPlayerKilled>(PlayerKilled);
+        }
+
         public void Start()
         {
             Inputs.Start();
 			MapManager.Instance.Start();
             EnemyManager.Instance.Start();
+
+            InitializeGameStatus();
+
+            EventManager.Instance.Dispatch(new OnGameStarted(_status));
         }
 
         public void Update()
         {
             EnemyManager.Instance.Update();
             MapManager.Instance.Update();
+        }
+
+
+        private void InitializeGameStatus()
+        {
+            _status = new GameStatus();
+            _status.MaxHealth = 10;
+            _status.CurrentHealth = 10;
+        }
+
+
+        private void PlayerKilled(OnPlayerKilled e)
+        {
+            SceneManager.LoadScene(0);
         }
     }
 }

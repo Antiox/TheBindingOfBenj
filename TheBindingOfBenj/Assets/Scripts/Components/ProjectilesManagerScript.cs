@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ProjectilesManagerScript : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
         EventManager.Instance.AddListener<OnProjectileSpawnRequested>(ProjectileSpawnRequested);
     }

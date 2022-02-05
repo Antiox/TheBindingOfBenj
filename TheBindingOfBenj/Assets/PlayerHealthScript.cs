@@ -1,0 +1,47 @@
+using GameLibrary;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerHealthScript : MonoBehaviour
+{
+    [SerializeField] private float _currentHealth = 10f;
+    [SerializeField] private float _maxHealth = 10f;
+    [SerializeField, Range(0f, 5f)] private float _immunityFrames = 1f;
+    private bool _isImmune = false;
+
+    private SpriteRenderer _spriteRenderer;
+
+    void Start()
+    {
+        _spriteRenderer = transform.Find("playerSprite").GetComponent<SpriteRenderer>();
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag(Tags.Enemy) && !_isImmune)
+        {
+            _currentHealth--;
+
+            if(_currentHealth <= 0)
+                EventManager.Instance.Dispatch(new OnPlayerKilled());
+            else
+            {
+                EventManager.Instance.Dispatch(new OnPlayerHurted(_maxHealth, _currentHealth));
+                StartCoroutine(WaitForImmunityFrames());
+            }
+        }
+    }
+
+    private IEnumerator WaitForImmunityFrames()
+    {
+        var originalColor = _spriteRenderer.color;
+        _spriteRenderer.color = Color.red;
+
+        _isImmune = true;
+        yield return new WaitForSeconds(_immunityFrames);
+        _isImmune = false;
+
+        _spriteRenderer.color = originalColor;
+    }
+}

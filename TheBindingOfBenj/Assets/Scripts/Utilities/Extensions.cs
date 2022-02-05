@@ -27,5 +27,23 @@ namespace GameLibrary
         {
             return list[Random.Range(0, list.Count)];
         }
+
+
+        /// <summary>
+        /// Permet de comparer un ensemble de tags et de renvoyer true si au moins un match
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="tags"></param>
+        /// <returns></returns>
+        public static bool CompareTags(this GameObject gameObject, params string[] tags)
+        {
+            foreach (var tag in tags)
+            {
+                if (gameObject.CompareTag(tag))
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

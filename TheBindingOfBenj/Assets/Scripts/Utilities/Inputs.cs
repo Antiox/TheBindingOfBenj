@@ -13,12 +13,15 @@ namespace GameLibrary
         public static Vector2 PlayerDirection { get; private set; }
         public static bool Attack { get; private set; }
 
-
-        public static void Start()
+        public static void Awake()
         {
             EventManager.Instance.AddListener<OnMouseMoved>(MouseMoved);
             EventManager.Instance.AddListener<OnPlayerMoved>(PlayerMoved);
             EventManager.Instance.AddListener<OnPlayerAttacked>(PlayerAttacked);
+        }
+
+        public static void Start()
+        {
         }
 
 

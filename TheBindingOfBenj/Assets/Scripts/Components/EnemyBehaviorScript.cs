@@ -9,6 +9,12 @@ public class EnemyBehaviorScript : MonoBehaviour
     private CircleCollider2D _collider;
     private SpriteRenderer _renderer;
 
+    private void Awake()
+    {
+        EventManager.Instance.AddListener<OnEnemyHurt>(EnemyHurt);
+
+    }
+
     private void Start()
     {
         _renderer = GetComponent<SpriteRenderer>();
@@ -16,14 +22,7 @@ public class EnemyBehaviorScript : MonoBehaviour
         var generatorScript = GetComponent<EnemyGeneratorScript>();
         _health = generatorScript.Enemy.Health;
 
-        EventManager.Instance.AddListener<OnEnemyHurt>(EnemyHurt);
-
         StartCoroutine(generatorScript.Enemy.pattern.Execute());
-    }
-
-    private void Update()
-    {
-        
     }
 
     private void OnDestroy()

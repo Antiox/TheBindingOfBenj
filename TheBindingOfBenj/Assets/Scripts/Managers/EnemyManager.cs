@@ -26,11 +26,15 @@ namespace GameLibrary
         private readonly List<GameObject> _enemies = new List<GameObject>();
         private GameObject _enemiesContainer;
 
+        public void Awake()
+        {
+            EventManager.Instance.AddListener<OnEnemySpawnRequested>(EnemySpawnRequested);
+            EventManager.Instance.AddListener<OnEnemyDied>(EnemyDied);
+        }
+
         public void Start()
         {
             _enemiesContainer = GameObject.FindGameObjectWithTag(Tags.EnemiesContainer);
-            EventManager.Instance.AddListener<OnEnemySpawnRequested>(EnemySpawnRequested);
-            EventManager.Instance.AddListener<OnEnemyDied>(EnemyDied);
         }
 
         public void Update()
