@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GameLibrary
 {
-    public static class Extensions 
+    public static class Extensions
     {
         /// <summary>
         /// accède à la valeur grâce à un vector2
@@ -14,7 +14,7 @@ namespace GameLibrary
         /// <returns></returns>
         public static T Get<T>(this T[,] matrix, Vector2 value)
         {
-            return matrix[(int) value.x, (int) value.y];
+            return matrix[(int)value.x, (int)value.y];
         }
 
         /// <summary>
@@ -44,6 +44,20 @@ namespace GameLibrary
             }
 
             return false;
+        }
+
+
+        /// <summary>
+        /// Permet de cloner un ScriptableObject
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="scriptable"></param>
+        /// <returns></returns>
+        public static T Clone<T>(this T scriptable) where T : ScriptableObject
+        {
+            var clone = Object.Instantiate(scriptable);
+            clone.name = scriptable.name;
+            return clone;
         }
     }
 }

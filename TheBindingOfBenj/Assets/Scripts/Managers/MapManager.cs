@@ -119,10 +119,6 @@ namespace GameLibrary
                     weapon.GetComponent<WeaponGeneratorScript>().Weapon = weapons[Random.Range(0, weapons.Length)];
                 }
             }
-
-
-
-
         }
 
         /// <summary>
