@@ -21,7 +21,7 @@ public class MapManagerScript : MonoBehaviour
 
     private void ChangeRoom(OnPlayerRoomChanged e)
     {
-        var worldPosRoom = new Vector2(e.Room.Coordinates.x * e.Room.Size.x, e.Room.Coordinates.y * e.Room.Size.y);
+        var worldPosRoom = new Vector2(e.Room.Coordinates.x * e.Room.CellSize.x, e.Room.Coordinates.y * e.Room.CellSize.y);
 
         // mouvement caméra
         StartCoroutine(MoveCameraRoutine(worldPosRoom));

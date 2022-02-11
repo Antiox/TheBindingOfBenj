@@ -42,16 +42,26 @@ namespace GameLibrary
 
 
         /// <summary>
-        /// Indique la largeur et hauteur de la salle
+        /// Indique la largeur et hauteur d'une cellule de salle
         /// </summary>
-        public Vector2 Size
+        public Vector2 CellSize
         {
             get
             {
-                // 10.6f taille de la prefab de base
-                return new Vector2(20f * transform.localScale.x, 10f * transform.localScale.y);
+                // 11 taille de la prefab de base
+                return new Vector2(11 * transform.localScale.x, 11 * transform.localScale.y);
             }
         }
+
+        /// <summary>
+        /// Largeur et hauteur d'une salle spéciale
+        /// </summary>
+        public Vector2 Size { get; set; }
+
+        /// <summary>
+        /// les salles connectées à celle-ci
+        /// </summary>
+        public List<RoomScript> RoomsConnected { get; private set; }
 
 
         public GameObject UpDoor { get; private set; }
@@ -69,10 +79,11 @@ namespace GameLibrary
             Neighbours = new Dictionary<string, RoomScript>();
             SpawnedEnemies = false;
             OpenedDoors = DoorType.None;
-            UpDoor = transform.GetChild(0).GetChild(2).gameObject;
-            RightDoor = transform.GetChild(1).GetChild(2).gameObject;
-            DownDoor = transform.GetChild(2).GetChild(2).gameObject;
-            LeftDoor = transform.GetChild(3).GetChild(2).gameObject;
+            RoomsConnected = new List<RoomScript>();
+            UpDoor = transform.GetChild(0).gameObject;
+            RightDoor = transform.GetChild(1).gameObject;
+            DownDoor = transform.GetChild(2).gameObject;
+            LeftDoor = transform.GetChild(3).gameObject;
         }
 
         private void Update()

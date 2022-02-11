@@ -29,7 +29,6 @@ namespace GameLibrary
         public void Awake()
         {
             Inputs.Awake();
-            MapManager.Instance.Awake();
             EnemyManager.Instance.Awake();
             ProjectileManager.Instance.Awake();
 
