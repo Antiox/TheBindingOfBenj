@@ -1,5 +1,7 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -76,7 +78,7 @@ namespace GameLibrary
             // uniquement sur le coté opposé au spawn
             AddSpecialRoom("BossRoom", OnOppositeSide, RoomType.Boss);
 
-            for (int i = 0; i < 11; i++)
+            for (int i = 0; i < 9; i++)
             {
                 AddSpecialRoom("OtherRoom" + i, AwayFromOtherRooms, RoomType.Other);
             }
@@ -89,6 +91,9 @@ namespace GameLibrary
                 if (item.Key.StartsWith("OtherRoom")) _map.Get(item.Value.Coordinates).ChangeColor(Color.blue);
             }
 
+            // ajout des éléments à l'intérieur d'une salle
+            LoadRoomsConfiguration();
+
             // création des chemins entre les salles
             ConnectAllRooms();
 
@@ -97,23 +102,38 @@ namespace GameLibrary
 
         }
 
-        private void GenerateObstaclesAndWeapons()
+        private void LoadRoomsConfiguration()
         {
+            var rooms = Resources.LoadAll("Rooms");
             var obstacles = Resources.LoadAll("Prefabs/Obstacles");
             var weapons = Resources.LoadAll<Weapon>("Scriptables");
-
-            foreach (var room in _map)
+            
+            foreach (var room in _specialRooms.Where(room => room.Value.Type == RoomType.Other && room.Key.EndsWith("_0_0")))
             {
-                var middlePointRoom = new Vector3(room.Coordinates.x * room.CellSize.x, room.Coordinates.y * room.CellSize.y, 0);
-                if (room.Type != RoomType.Spawn && room.Type != RoomType.Boss && room.Type != RoomType.Other)
+                var tiles = JsonConvert.DeserializeObject<List<Tile>>(File.ReadAllText("Assets/Resources/Rooms/" + rooms[Random.Range(0, rooms.Length)].name + ".json"));
+                foreach (var tile in tiles)
                 {
-                    if (Random.Range(0, 3) == 0) // 1/3 d'avoir un obstacle dans la salle
-                        Object.Instantiate(obstacles[Random.Range(0, obstacles.Length)], middlePointRoom, Quaternion.identity, GameObject.Find("Obstacles").transform);
-                }
-                if (room.Type == RoomType.Other)
-                {
-                    var weapon = Object.Instantiate(Resources.Load("Prefabs/Weapon"), middlePointRoom, Quaternion.identity) as GameObject;
-                    weapon.GetComponent<WeaponGeneratorScript>().Weapon = weapons[Random.Range(0, weapons.Length)];
+                    var pos = new Vector2(room.Value.Coordinates.x * room.Value.CellSize.x + tile.X * 7 - 5, 
+                                          room.Value.Coordinates.y * room.Value.CellSize.y + tile.Y * 7 - 5);
+                    switch (tile.Type)
+                    {
+                        case TileType.Obstacle:
+                            Object.Instantiate(obstacles[Random.Range(0, obstacles.Length)], pos, Quaternion.identity, GameObject.Find("Obstacles").transform);
+                            break;
+                        case TileType.Weapon:
+                            var weapon = Object.Instantiate(Resources.Load("Prefabs/Weapon"), pos, Quaternion.identity) as GameObject;
+                            weapon.GetComponent<WeaponGeneratorScript>().Weapon = weapons[Random.Range(0, weapons.Length)];
+                            break;
+                        case TileType.Loot:
+                            break;
+                        case TileType.Monster:
+                            EventManager.Instance.Dispatch(new OnEnemySpawnRequested(pos, Utility.RandomEnum<EnemyType>()));
+                            break;
+                        case TileType.Hole:
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
@@ -185,9 +205,9 @@ namespace GameLibrary
 
         private void AddSpecialRoom(string name, System.Predicate<Vector2[]> predicate, RoomType type)
         {
-            var size = new Vector2(Random.Range(1, 3) * 2 + 1, Random.Range(1, 3) * 2 + 1);
+            //var size = new Vector2(Random.Range(1, 3) * 2 + 1, Random.Range(1, 3) * 2 + 1);
 
-            //var size = new Vector2(7, 7);
+            var size = new Vector2(5, 5);
 
             var startCoord = RandomPossibleCoordinates(predicate, size);
 

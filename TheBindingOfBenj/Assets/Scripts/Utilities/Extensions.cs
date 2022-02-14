@@ -59,5 +59,8 @@ namespace GameLibrary
             clone.name = scriptable.name;
             return clone;
         }
+
+
+
     }
 }
