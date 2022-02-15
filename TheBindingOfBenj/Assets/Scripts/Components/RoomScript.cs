@@ -111,12 +111,12 @@ namespace GameLibrary
                 {
                     door.GetComponent<SpriteRenderer>().material = Resources.Load("Materials/Obstacle", typeof(Material)) as Material;
                     door.tag = Tags.Untagged;
-                    Debug.Log("pololoplpl " + door + " de " + door.transform.parent + "passe " + door.tag);
+                    door.layer = 0;
                 }
                 else
                 {
                     door.tag = Tags.DeactivatedDoor;
-                    Debug.Log("ayaya " + door + " de " + door.transform.parent + "passe " + door.tag);
+                    door.layer = 11;
                 }
             }
         }

@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - Missile
   - Projectile
+  - DeactivatedDoor
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Unselectable
   - Enemy
   - Weapon
-  - 
+  - DeactivatedWalls
   - 
   - 
   - 

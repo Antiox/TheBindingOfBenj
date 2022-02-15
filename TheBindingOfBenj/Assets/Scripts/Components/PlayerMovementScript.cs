@@ -36,12 +36,12 @@ namespace GameLibrary
             _rb.velocity = Vector2.ClampMagnitude(_rb.velocity, _maxVelocity);
         }
 
-
+        /*
         private void OnTriggerEnter2D(Collider2D collider)
         {
             if (collider.gameObject.tag == "Door")
             {
-                var room = collider.gameObject.transform.parent.parent.GetComponent<RoomScript>();
+                var room = collider.gameObject.transform.parent.GetComponent<RoomScript>();
 
                 // à revoir
                 switch (collider.name)
@@ -68,5 +68,7 @@ namespace GameLibrary
                 EventManager.Instance.Dispatch(new OnPlayerRoomChanged(room));
             }
         }
+        */
+
     }
 }
