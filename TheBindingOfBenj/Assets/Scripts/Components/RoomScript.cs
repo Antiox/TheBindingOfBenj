@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace GameLibrary
 {
@@ -109,7 +108,16 @@ namespace GameLibrary
                 door.GetComponent<SpriteRenderer>().enabled = !openOrClose;
 
                 if (!openOrClose)
+                {
                     door.GetComponent<SpriteRenderer>().material = Resources.Load("Materials/Obstacle", typeof(Material)) as Material;
+                    door.tag = Tags.Untagged;
+                    Debug.Log("pololoplpl " + door + " de " + door.transform.parent + "passe " + door.tag);
+                }
+                else
+                {
+                    door.tag = Tags.DeactivatedDoor;
+                    Debug.Log("ayaya " + door + " de " + door.transform.parent + "passe " + door.tag);
+                }
             }
         }
 

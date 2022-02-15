@@ -32,7 +32,7 @@ public class ProjectileBehaviourScript : MonoBehaviour
             Destroy(gameObject);
             Destroy(particles, 2f);
         }
-        else if (other.tag != Tags.Player && other.tag != Tags.Projectile)
+        else if (other.tag != Tags.Player && other.tag != Tags.Projectile && other.tag != Tags.DeactivatedDoor)
         {
             var particles = Instantiate(Resources.Load("Prefabs/Particles/MetalHit2D"), transform.position, Quaternion.identity) as GameObject;
             AudioSource.PlayClipAtPoint(Weapon.WallImpact.GetRandom(), Camera.main.transform.position);
