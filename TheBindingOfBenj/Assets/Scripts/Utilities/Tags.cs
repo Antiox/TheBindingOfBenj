@@ -9,5 +9,6 @@
         public static string DeactivatedDoor { get; private set; } = "DeactivatedDoor";
         public static string Door { get; private set; } = "Door";
         public static string Untagged { get; private set; } = "Untagged";
+        public static string Hole { get; private set; } = "Hole";
     }
 }

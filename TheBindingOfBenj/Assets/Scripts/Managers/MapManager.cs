@@ -106,14 +106,8 @@ namespace GameLibrary
             foreach (var room in _specialRooms.Where(room => room.Value.Type == RoomType.Other && room.Key.EndsWith("_0_0")))
             {
                 var tiles = JsonConvert.DeserializeObject<List<Tile>>(File.ReadAllText("Assets/Resources/Rooms/" + rooms[Random.Range(0, rooms.Length)].name + ".json"));
-
-                Debug.Log("initialisation de " + room + " tiles " + tiles.Count);
-
                 foreach (var tile in tiles)
                 {
-
-                    Debug.Log("test " + tile.Type);
-
                     var pos = new Vector2(room.Value.Coordinates.x * room.Value.CellSize.x + tile.X * 7 - 5, 
                                           room.Value.Coordinates.y * room.Value.CellSize.y + tile.Y * 7 - 5);
                     switch (tile.Type)
@@ -129,7 +123,6 @@ namespace GameLibrary
                             break;
                         case TileType.Monster:
                             room.Value.MonstersPositions.Add(pos);
-                            Debug.Log("j'ai ajouté monstre dans " + room.Value + " à " + pos);
                             break;
                         case TileType.Hole:
                             Object.Instantiate(Resources.Load("Prefabs/Obstacles/Hole/Hole"), pos, Quaternion.identity, GameObject.Find("Holes").transform);
