@@ -63,6 +63,9 @@ namespace GameLibrary
         public List<RoomScript> RoomsConnected { get; private set; }
 
 
+        public List<Vector2> MonstersPositions { get; private set; }
+
+
         public GameObject UpDoor { get; private set; }
         public GameObject RightDoor { get; private set; }
         public GameObject DownDoor { get; private set; }
@@ -79,6 +82,7 @@ namespace GameLibrary
             SpawnedEnemies = false;
             OpenedDoors = DoorType.None;
             RoomsConnected = new List<RoomScript>();
+            MonstersPositions = new List<Vector2>();
             UpDoor = transform.GetChild(0).gameObject;
             RightDoor = transform.GetChild(1).gameObject;
             DownDoor = transform.GetChild(2).gameObject;
@@ -92,10 +96,12 @@ namespace GameLibrary
         /// <summary>
         /// ouvre ou ferme les portes de la salle selon le bool
         /// false = ferme, true = ouvre
+        /// destroy pour dire si l'on détruit l'objet
         /// </summary>
         /// <param name="type"></param>
         /// <param name="openOrClose"></param>
-        public void OpenCloseDoors(DoorType type, bool openOrClose)
+        /// <param name="destroy"></param>
+        public void OpenCloseDoors(DoorType type, bool openOrClose, bool destroy = false)
         {
             if (type.HasFlag(DoorType.Up)) OpenCloseDoor(UpDoor);
             if (type.HasFlag(DoorType.Right)) OpenCloseDoor(RightDoor);
@@ -104,19 +110,23 @@ namespace GameLibrary
 
             void OpenCloseDoor(GameObject door)
             {
-                door.GetComponent<BoxCollider2D>().isTrigger = openOrClose;
-                door.GetComponent<SpriteRenderer>().enabled = !openOrClose;
-
-                if (!openOrClose)
-                {
-                    door.GetComponent<SpriteRenderer>().material = Resources.Load("Materials/Obstacle", typeof(Material)) as Material;
-                    door.tag = Tags.Untagged;
-                    door.layer = 0;
-                }
+                if (destroy) Destroy(door);
                 else
                 {
-                    door.tag = Tags.DeactivatedDoor;
-                    door.layer = 11;
+                    door.GetComponent<BoxCollider2D>().enabled = !openOrClose;
+                    door.GetComponent<SpriteRenderer>().enabled = !openOrClose;
+
+                    if (!openOrClose)
+                    {
+                        door.GetComponent<SpriteRenderer>().material = Resources.Load("Materials/Obstacle", typeof(Material)) as Material;
+                        door.tag = Tags.Door;
+                        door.layer = 0;
+                    }
+                    else
+                    {
+                        door.tag = Tags.DeactivatedDoor;
+                        door.layer = 11;
+                    }
                 }
             }
         }

@@ -21,25 +21,31 @@ public class MapManagerScript : MonoBehaviour
 
     private void ChangeRoom(OnPlayerRoomChanged e)
     {
-        var worldPosRoom = new Vector2(e.Room.Coordinates.x * e.Room.CellSize.x, e.Room.Coordinates.y * e.Room.CellSize.y);
-
-        // mouvement caméra
-        _currentRoom = e.Room;
-
-
-        if (!_currentRoom.SpawnedEnemies && _currentRoom.Type != RoomType.Boss && _currentRoom.Type != RoomType.Spawn)
+        _currentRoom = MapManager.Instance.GetRoomRoot(e.Room).Value;
+        Debug.Log("changement de salle " + e.Room + " aaa " + _currentRoom);
+        if (_currentRoom != null)
         {
-            // spawn des nouveaux ennemis
-            
+            if (!_currentRoom.SpawnedEnemies && _currentRoom.Type != RoomType.Boss && _currentRoom.Type != RoomType.Spawn)
+            {
+                // spawn des nouveaux ennemis
+                foreach (var pos in _currentRoom.MonstersPositions)
+                {
+                    Debug.Log("truc " + _currentRoom + " à " + pos);
+                    EventManager.Instance.Dispatch(new OnEnemySpawnRequested(pos, Utility.RandomEnum<EnemyType>()));
+                    _currentRoom.SpawnedEnemies = true;
+                }
 
-            // blocage des portes
-            if (_currentRoom.SpawnedEnemies)
-                _currentRoom.OpenCloseDoors(e.Room.OpenedDoors, false);
+                // blocage des portes
+                if (_currentRoom.SpawnedEnemies)
+                {
+                    MapManager.Instance.OpenCloseDoorFromRoot(_currentRoom, false);
+                }
+            }
         }
     }
 
     public void OpenDoors(OnAllEnemiesKilled e)
     {
-        _currentRoom.OpenCloseDoors(_currentRoom.OpenedDoors, true);
+        MapManager.Instance.OpenCloseDoorFromRoot(_currentRoom, true);
     }
 }

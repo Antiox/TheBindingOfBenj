@@ -72,7 +72,6 @@ namespace GameLibrary
 
             var worldPos = _specialRooms["SpawnRoom_0_0"].Coordinates * _specialRooms["SpawnRoom_0_0"].CellSize;
             EventManager.Instance.Dispatch(new OnPlayerSpawnRequested(worldPos));
-            EventManager.Instance.Dispatch(new OnPlayerRoomChanged(_specialRooms["SpawnRoom_0_0"]));
 
             // place un point aléatoire pour la salle de boss
             // uniquement sur le coté opposé au spawn
@@ -84,7 +83,7 @@ namespace GameLibrary
             }
 
             /// debug
-            foreach (KeyValuePair<string, RoomScript> item in _specialRooms)
+            foreach (var item in _specialRooms)
             {
                 if (item.Key.StartsWith("SpawnRoom")) _map.Get(item.Value.Coordinates).ChangeColor(Color.green);
                 if (item.Key.StartsWith("BossRoom")) _map.Get(item.Value.Coordinates).ChangeColor(Color.red);
@@ -105,12 +104,13 @@ namespace GameLibrary
         private void LoadRoomsConfiguration()
         {
             var rooms = Resources.LoadAll("Rooms");
-            var obstacles = Resources.LoadAll("Prefabs/Obstacles");
+            var obstacles = Resources.LoadAll("Prefabs/Obstacles/Rocks");
             var weapons = Resources.LoadAll<Weapon>("Scriptables");
             
             foreach (var room in _specialRooms.Where(room => room.Value.Type == RoomType.Other && room.Key.EndsWith("_0_0")))
             {
                 var tiles = JsonConvert.DeserializeObject<List<Tile>>(File.ReadAllText("Assets/Resources/Rooms/" + rooms[Random.Range(0, rooms.Length)].name + ".json"));
+                var monstersPositions = new List<Vector2>();
                 foreach (var tile in tiles)
                 {
                     var pos = new Vector2(room.Value.Coordinates.x * room.Value.CellSize.x + tile.X * 7 - 5, 
@@ -121,15 +121,17 @@ namespace GameLibrary
                             Object.Instantiate(obstacles[Random.Range(0, obstacles.Length)], pos, Quaternion.identity, GameObject.Find("Obstacles").transform);
                             break;
                         case TileType.Weapon:
-                            var weapon = Object.Instantiate(Resources.Load("Prefabs/Weapon"), pos, Quaternion.identity) as GameObject;
+                            var weapon = Object.Instantiate(Resources.Load("Prefabs/Weapon"), pos, Quaternion.identity, GameObject.Find("Weapons").transform) as GameObject;
                             weapon.GetComponent<WeaponGeneratorScript>().Weapon = weapons[Random.Range(0, weapons.Length)];
                             break;
                         case TileType.Loot:
                             break;
                         case TileType.Monster:
-                            EventManager.Instance.Dispatch(new OnEnemySpawnRequested(pos, Utility.RandomEnum<EnemyType>()));
+                            room.Value.MonstersPositions.Add(pos);
+                            Debug.Log("j'ai ajouté monstre dans " + room.Value + " à " + pos);
                             break;
                         case TileType.Hole:
+                            Object.Instantiate(Resources.Load("Prefabs/Obstacles/Hole/Hole"), pos, Quaternion.identity, GameObject.Find("Holes").transform);
                             break;
                         default:
                             break;
@@ -145,8 +147,7 @@ namespace GameLibrary
             foreach (var room in _specialRooms)
             {
                 // radical de la salle
-                var roomString = _specialRooms.FirstOrDefault(x => x.Value == room.Value).Key;
-                roomString = roomString.Substring(0, roomString.IndexOf('_'));
+                var roomString = GetRoomRoot(room.Value).Key;
 
                 if (!roots.ContainsKey(roomString + "_0_0"))
                     roots.Add(roomString + "_0_0", _specialRooms[roomString + "_0_0"]);
@@ -154,15 +155,13 @@ namespace GameLibrary
 
             foreach (var room in roots)
             {
-
                 // récupere les salles les plus proches
                 var closestRooms = roots.Where(x => x.Value != room.Value && !x.Value.RoomsConnected.Contains(room.Value) && Vector2.Distance(x.Value.Coordinates, room.Value.Coordinates) <= _columnCount / 2).OrderBy(x => Vector2.Distance(x.Value.Coordinates, room.Value.Coordinates));
 
                 // connexion aux trois salles les plus proches
-                for (int i = 0; i < 3 - room.Value.RoomsConnected.Count; i++)
+                for (int i = 0; i < closestRooms.Count() - room.Value.RoomsConnected.Count; i++)
                 {
-                    var fromString = _specialRooms.FirstOrDefault(x => x.Value == room.Value).Key;
-                    fromString = fromString.Substring(0, fromString.IndexOf('_'));
+                    var fromString = GetRoomRoot(room.Value).Key;
                     var from = room.Value;
 
                     var to = closestRooms.ElementAt(i).Value;
@@ -170,8 +169,7 @@ namespace GameLibrary
                     from.RoomsConnected.Add(to);
                     to.RoomsConnected.Add(from);
 
-                    var toString = _specialRooms.FirstOrDefault(x => x.Value == to).Key;
-                    toString = toString.Substring(0, toString.IndexOf('_'));
+                    var toString = GetRoomRoot(to).Key;
 
                     // calcul des meilleures portes
                     string[] doors = { "_Up", "_Down", "_Left", "_Right" };
@@ -215,38 +213,61 @@ namespace GameLibrary
             {
                 for (int i = 0; i < size.x; i++)
                 {
-                    var worldPosRoom = new Vector2(i + startCoord.x, j + startCoord.y);
+                    var posRoom = new Vector2(i + startCoord.x, j + startCoord.y);
+                    var room = _map.Get(posRoom);
 
                     var roomName = "";
 
+                    Debug.Log(i + " " + j + " room : " + room);
+
+                    void InstanciateWallTrigger(int index, float xOffset, float yOffset)
+                    {
+                        Debug.Log("instanciation à " + room.transform.GetChild(index).transform.position + " parent " + room.transform.GetChild(index));
+                        var res = (Object.Instantiate(Resources.Load("Prefabs/WallTrigger"), room.transform.GetChild(index).transform.position, Quaternion.identity, room.transform.GetChild(index)) as GameObject).transform;
+                        res.position += new Vector3(xOffset, yOffset, 0);
+                    }
+
                     if ((int) size.x / 2 == i)
                     {
-                        if (j == size.y - 1) roomName = name + "_Up";
-                        else if (j == 0) roomName = name + "_Down";
+                        if (j == size.y - 1)
+                        {
+                            roomName = name + "_Up";
+                            InstanciateWallTrigger(0, 0, -3f);
+                        }
+                        else if (j == 0)
+                        {
+                            roomName = name + "_Down";
+                            InstanciateWallTrigger(2, 0, 3f);
+                        }
                     }
                     else if ((int) size.y / 2 == j)
                     {
-                        if (i == size.x - 1) roomName = name + "_Right";
-                        else if (i == 0) roomName = name + "_Left";
+                        if (i == size.x - 1)
+                        {
+                            roomName = name + "_Right";
+                            InstanciateWallTrigger(1, -3f, 0);
+                        }
+                        else if (i == 0)
+                        {
+                            roomName = name + "_Left";
+                            InstanciateWallTrigger(3, 3f, 0);
+                        }
                     }
-
+                    
                     if (roomName == "") roomName = name + "_" + i + "_" + j;
 
-                    _specialRooms.Add(roomName, _map.Get(worldPosRoom));
+                    _specialRooms.Add(roomName, room);
                     _specialRooms[roomName].Type = type;
                     _specialRooms[roomName].Weight = 300;
                     _specialRooms[roomName].Size = size;
 
                     // ouverture des portes intérieures à la salle
-                    if (i < size.x - 1) Object.Destroy(_specialRooms[roomName].RightDoor);
-                    if (i > 0) Object.Destroy(_specialRooms[roomName].LeftDoor);
-                    if (j < size.y - 1) Object.Destroy(_specialRooms[roomName].UpDoor);
-                    if (j > 0) Object.Destroy(_specialRooms[roomName].DownDoor);
+                    if (i < size.x - 1) Object.Destroy(room.RightDoor);
+                    if (i > 0) Object.Destroy(room.LeftDoor);
+                    if (j < size.y - 1) Object.Destroy(room.UpDoor);
+                    if (j > 0) Object.Destroy(room.DownDoor);
                 }
             }
-
-
-
         }
 
         private void GenerateBlankMap()
@@ -265,6 +286,20 @@ namespace GameLibrary
                     room.name = i + " " + j;
                 }
             }
+        }
+
+        /// <summary>
+        /// renvoie un string équivalant au radical de la salle (ex : OtherRoom5)
+        /// et le roomScript associé à la base de la salle (ex : OtherRoom5_0_0)
+        /// </summary>
+        /// <param name="room"></param>
+        /// <returns></returns>
+        public KeyValuePair<string, RoomScript> GetRoomRoot(RoomScript room)
+        {
+            string keyRoom = _specialRooms.FirstOrDefault(x => x.Value == room).Key;
+            if (keyRoom == null) return default(KeyValuePair<string, RoomScript>);
+            keyRoom = keyRoom.Substring(0, keyRoom.IndexOf('_'));
+            return new KeyValuePair<string, RoomScript>(keyRoom, _specialRooms[keyRoom + "_0_0"]);
         }
 
         /// <summary>
@@ -372,6 +407,15 @@ namespace GameLibrary
             }
         }
 
+        public void OpenCloseDoorFromRoot(RoomScript root, bool openClose)
+        {
+            // à revoir
+            if (root.OpenedDoors.HasFlag(DoorType.Up)) _specialRooms[GetRoomRoot(root).Key + "_Up"].OpenCloseDoors(DoorType.Up, openClose);
+            if (root.OpenedDoors.HasFlag(DoorType.Down)) _specialRooms[GetRoomRoot(root).Key + "_Down"].OpenCloseDoors(DoorType.Down, openClose); ;
+            if (root.OpenedDoors.HasFlag(DoorType.Right)) _specialRooms[GetRoomRoot(root).Key + "_Right"].OpenCloseDoors(DoorType.Right, openClose); ;
+            if (root.OpenedDoors.HasFlag(DoorType.Left)) _specialRooms[GetRoomRoot(root).Key + "_Left"].OpenCloseDoors(DoorType.Left, openClose); ;
+        }
+
         /// <summary>
         /// ouvre les portes entre la salle from et la salle to
         /// </summary>
@@ -452,7 +496,6 @@ namespace GameLibrary
                                     }
                                 }
 
-
                                 // ouvertures des portes
                                 var doorDirection = (currentNode.Parent.Coordinates - currentNode.Coordinates);
                                 if (doorDirection.x == -1)
@@ -476,14 +519,17 @@ namespace GameLibrary
                                     doorsToOpenParent |= DoorType.Down;
                                 }
 
-                                currentNode.Parent.OpenCloseDoors(doorsToOpenParent, true);
+                                var parentRoomRoot = GetRoomRoot(currentNode.Parent).Value;
+                                var currentRoomRoot = GetRoomRoot(currentNode).Value;
+
+                                currentNode.Parent.OpenCloseDoors(doorsToOpenParent, true, parentRoomRoot == null);
+                                currentNode.OpenCloseDoors(doorsToOpen, true, currentRoomRoot == null);
+
+                                if (parentRoomRoot != null) parentRoomRoot.OpenedDoors |= doorsToOpenParent;
+                                if (currentRoomRoot != null) currentRoomRoot.OpenedDoors |= doorsToOpen;
                             }
-
-                            currentNode.OpenCloseDoors(doorsToOpen, true);
-
                             currentNode = currentNode.Parent;
                         }
-
                         return;
                     }
                 }

@@ -7,6 +7,7 @@
         public static string Enemy { get; private set; } = "Enemy";
         public static string Projectile { get; private set; } = "Projectile";
         public static string DeactivatedDoor { get; private set; } = "DeactivatedDoor";
+        public static string Door { get; private set; } = "Door";
         public static string Untagged { get; private set; } = "Untagged";
     }
 }
