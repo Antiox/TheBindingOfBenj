@@ -11,9 +11,9 @@ namespace GameLibrary
     {
         Empty = 0,
         Obstacle = 1,
-        Weapon = 2,
+        Monster = 2,
         Loot = 3,
-        Monster = 4,
+        Weapon = 4,
         Hole = 5
     }
 }

@@ -95,10 +95,6 @@ namespace GameLibrary
 
             // création des chemins entre les salles
             ConnectAllRooms();
-
-            // création des obstacles et des armes
-            //GenerateObstaclesAndWeapons();
-
         }
 
         private void LoadRoomsConfiguration()
@@ -110,9 +106,14 @@ namespace GameLibrary
             foreach (var room in _specialRooms.Where(room => room.Value.Type == RoomType.Other && room.Key.EndsWith("_0_0")))
             {
                 var tiles = JsonConvert.DeserializeObject<List<Tile>>(File.ReadAllText("Assets/Resources/Rooms/" + rooms[Random.Range(0, rooms.Length)].name + ".json"));
-                var monstersPositions = new List<Vector2>();
+
+                Debug.Log("initialisation de " + room + " tiles " + tiles.Count);
+
                 foreach (var tile in tiles)
                 {
+
+                    Debug.Log("test " + tile.Type);
+
                     var pos = new Vector2(room.Value.Coordinates.x * room.Value.CellSize.x + tile.X * 7 - 5, 
                                           room.Value.Coordinates.y * room.Value.CellSize.y + tile.Y * 7 - 5);
                     switch (tile.Type)
@@ -218,11 +219,8 @@ namespace GameLibrary
 
                     var roomName = "";
 
-                    Debug.Log(i + " " + j + " room : " + room);
-
                     void InstanciateWallTrigger(int index, float xOffset, float yOffset)
                     {
-                        Debug.Log("instanciation à " + room.transform.GetChild(index).transform.position + " parent " + room.transform.GetChild(index));
                         var res = (Object.Instantiate(Resources.Load("Prefabs/WallTrigger"), room.transform.GetChild(index).transform.position, Quaternion.identity, room.transform.GetChild(index)) as GameObject).transform;
                         res.position += new Vector3(xOffset, yOffset, 0);
                     }
