@@ -115,10 +115,10 @@ namespace GameLibrary
                 {
                     door.GetComponent<BoxCollider2D>().enabled = !openOrClose;
                     door.GetComponent<SpriteRenderer>().enabled = !openOrClose;
+                    door.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = !openOrClose;
 
                     if (!openOrClose)
                     {
-                        door.GetComponent<SpriteRenderer>().material = Resources.Load("Materials/Obstacle", typeof(Material)) as Material;
                         door.tag = Tags.Door;
                         door.layer = 0;
                     }
