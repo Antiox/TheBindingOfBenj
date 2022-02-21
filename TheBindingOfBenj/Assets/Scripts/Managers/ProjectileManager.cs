@@ -68,18 +68,16 @@ namespace GameLibrary
             var direction = target - position;
             var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
 
-            var projectileTemplate = Resources.Load<Weapon>($"Scriptables/{weapon.name}");
-
             var projectile = Object.Instantiate(Resources.Load<GameObject>("Prefabs/GenericProjectile"), position + direction.normalized, Quaternion.AngleAxis(angle, Vector3.forward), GameObject.Find("Projectiles").transform);
 
+            var projectileTemplate = Resources.Load<Weapon>($"Scriptables/{weapon.name}");
+
             var rendererScript = projectile.GetComponent<ProjectileGeneratorScript>();
-            projectileTemplate.Pattern = GetPattern(projectileTemplate.ProjectileType, projectile, target, projectileTemplate.Speed, projectileTemplate.HomingRadius);
-            projectile.GetComponent<ProjectileBehaviourScript>().Weapon = projectileTemplate;
-            rendererScript.Weapon = projectileTemplate;
+
+            rendererScript.Weapon = projectileTemplate.Clone();
+            rendererScript.Weapon.Pattern = GetPattern(projectileTemplate.ProjectileType, projectile, target, projectileTemplate.Speed, projectileTemplate.HomingRadius);
+
             rendererScript.LoadProjectile();
-
-
-            projectile.GetComponent<ProjectileBehaviourScript>().Init();
         }
 
         private IPattern GetPattern(ProjectileType type, GameObject source, Vector3 target, float speed, float homingRadius)
@@ -88,6 +86,7 @@ namespace GameLibrary
             {
                 case ProjectileType.BasicProjectile: return new GenericProjectilePattern(source, target, speed);
                 case ProjectileType.HomingProjectile: return new HomingProjectilePattern(source, target, speed, homingRadius);
+                case ProjectileType.BouncingProjectile: return new BouncingProjectilePattern(source, target, speed);
                 default: return new GenericProjectilePattern(source, target, speed);
             }
         }

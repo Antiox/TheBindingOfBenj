@@ -5,39 +5,38 @@ using UnityEngine;
 
 public class ProjectileBehaviourScript : MonoBehaviour
 {
-    public Weapon Weapon { get; set; }
+    private Weapon _weapon;
 
     private void Start()
     {
-    }
-
-    public void Init()
-    {
-        transform.localScale = new Vector3(Weapon.Radius, Weapon.Length, 1);
-        //Destroy(gameObject, Weapon.Duration);
         var generatorScript = GetComponent<ProjectileGeneratorScript>();
-        StartCoroutine(generatorScript.Weapon.Pattern.Execute());
+        _weapon = generatorScript.Weapon;
+        transform.localScale = new Vector3(_weapon.Radius, _weapon.Length, 1);
+        Destroy(gameObject, _weapon.Duration);
+
+        StartCoroutine(_weapon.Pattern.Execute());
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         // A rendre plus propre
-        if (other.tag == Tags.Enemy)
+        if (collision.gameObject.tag == Tags.Enemy)
         {
-            var enemy = other.gameObject.GetComponent<EnemyGeneratorScript>().Enemy;
-            EventManager.Instance.Dispatch(new OnEnemyHurt(other.gameObject, enemy, Weapon.Damage));
+            var enemy = collision.gameObject.GetComponent<EnemyGeneratorScript>().Enemy;
+            EventManager.Instance.Dispatch(new OnEnemyHurt(collision.gameObject, enemy, _weapon.Damage));
             var angle = transform.rotation.eulerAngles.z + 180f;
             var particles = Instantiate(Resources.Load("Prefabs/Particles/BloodSplatDirectional2D"), transform.position, Quaternion.Euler(0, 0, angle)) as GameObject;
-            AudioSource.PlayClipAtPoint(Weapon.EnemyImpact.GetRandom(), Camera.main.transform.position);
+            AudioSource.PlayClipAtPoint(_weapon.EnemyImpact.GetRandom(), Camera.main.transform.position);
             Destroy(gameObject);
             Destroy(particles, 2f);
         }
-        else if (other.tag != Tags.Player && other.tag != Tags.Projectile && other.tag != Tags.DeactivatedDoor && other.tag != Tags.Hole)
+        else if (collision.gameObject.tag != Tags.Player && collision.gameObject.tag != Tags.Projectile && collision.gameObject.tag != Tags.DeactivatedDoor && collision.gameObject.tag != Tags.Hole)
         {
             var particles = Instantiate(Resources.Load("Prefabs/Particles/MetalHit2D"), transform.position, Quaternion.identity) as GameObject;
-            AudioSource.PlayClipAtPoint(Weapon.WallImpact.GetRandom(), Camera.main.transform.position);
-            Destroy(gameObject);
+            AudioSource.PlayClipAtPoint(_weapon.WallImpact.GetRandom(), Camera.main.transform.position);
             Destroy(particles, 2f);
+            if (_weapon.ProjectileType != ProjectileType.BouncingProjectile) Destroy(gameObject);
         }
     }
 

@@ -12,7 +12,6 @@ public class EnemyBehaviorScript : MonoBehaviour
     private void Awake()
     {
         EventManager.Instance.AddListener<OnEnemyHurt>(EnemyHurt);
-
     }
 
     private void Start()

@@ -7,6 +7,7 @@ namespace GameLibrary
     public enum ProjectileType
     {
         BasicProjectile,
-        HomingProjectile
+        HomingProjectile,
+        BouncingProjectile
     }
 }

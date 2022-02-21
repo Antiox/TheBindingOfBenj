@@ -45,10 +45,12 @@ namespace GameLibrary
         {
             var player = GameObject.FindGameObjectWithTag(Tags.Player);
             var enemy = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), position, Quaternion.identity, _enemiesContainer.transform);
+
             var template = Resources.Load<Enemy>($"Scriptables/{type}");
             var rendererScript = enemy.GetComponent<EnemyGeneratorScript>();
             rendererScript.Enemy = template.Clone();
             rendererScript.Enemy.pattern = GetPattern(type, enemy, player);
+
             rendererScript.LoadEnemy();
             _enemies.Add(enemy);
 
@@ -67,8 +69,6 @@ namespace GameLibrary
                 default: return new GenericPattern(enemy, player);
             }
         }
-
-
 
         private void EnemySpawnRequested(OnEnemySpawnRequested e)
         {

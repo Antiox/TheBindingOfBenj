@@ -17,9 +17,9 @@ public class PlayerHealthScript : MonoBehaviour
         _spriteRenderer = transform.Find("playerSprite").GetComponent<SpriteRenderer>();
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnCollisionStay2D(Collision2D collision)
     {
-        if (other.gameObject.CompareTag(Tags.Enemy) && !_isImmune)
+        if (collision.gameObject.CompareTag(Tags.Enemy) && !_isImmune)
         {
             _currentHealth--;
 
