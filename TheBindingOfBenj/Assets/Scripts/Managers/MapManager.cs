@@ -13,6 +13,8 @@ namespace GameLibrary
         private Dictionary<string, RoomScript> _specialRooms;
         private RoomScript[,] _map;
 
+        private List<RoomScript> _paths;
+
         private GameObject _roomContainer;
 
         #region Singleton
@@ -31,8 +33,9 @@ namespace GameLibrary
             _roomContainer = GameObject.Find("Map");
             _columnCount = 40;
             _rowCount = 30;
-            _map = new RoomScript[_columnCount, _rowCount];
             _specialRooms = new Dictionary<string, RoomScript>();
+            _map = new RoomScript[_columnCount, _rowCount];
+            _paths = new List<RoomScript>();
         }
 
         #endregion
@@ -95,6 +98,20 @@ namespace GameLibrary
 
             // création des chemins entre les salles
             ConnectAllRooms();
+
+            CleanUselessRooms();
+        }
+
+        /// <summary>
+        /// retire les portes des salles inutilisées
+        /// </summary>
+        private void CleanUselessRooms()
+        {
+            foreach (var room in _map)
+            {
+                if (!_paths.Contains(room) && !_specialRooms.ContainsValue(room))
+                    room.OpenCloseDoors(DoorType.Up | DoorType.Right | DoorType.Down | DoorType.Left, true);
+            }
         }
 
         private void LoadRoomsConfiguration()
@@ -472,6 +489,8 @@ namespace GameLibrary
 
                         while (currentNode != null)
                         {
+                            _paths.Add(currentNode);
+
                             DoorType doorsToOpen = DoorType.None;
                             DoorType doorsToOpenParent = DoorType.None; // à optimiser (car ça ouvre la porte que d'un coté de la salle)
 
@@ -516,9 +535,11 @@ namespace GameLibrary
                                 currentNode.Parent.OpenCloseDoors(doorsToOpenParent, true, parentRoomRoot == null);
                                 currentNode.OpenCloseDoors(doorsToOpen, true, currentRoomRoot == null);
 
+
                                 if (parentRoomRoot != null) parentRoomRoot.OpenedDoors |= doorsToOpenParent;
                                 if (currentRoomRoot != null) currentRoomRoot.OpenedDoors |= doorsToOpen;
                             }
+
                             currentNode = currentNode.Parent;
                         }
                         return;
