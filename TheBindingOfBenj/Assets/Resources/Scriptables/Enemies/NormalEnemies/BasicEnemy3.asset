@@ -15,7 +15,8 @@ MonoBehaviour:
   artwork: {fileID: 21300000, guid: 9e91b58f4bb03c249a24e1505b68cce9, type: 3}
   Health: 50
   IsFlying: 1
-  Impact: {fileID: 0}
+  Weapon: {fileID: 0}
+  Impact: {fileID: 125648, guid: 4ec747ed5da0c5842acf382604be0371, type: 3}
   DeathSound:
   - {fileID: 8300000, guid: 8205643392935c54d99e90dc01467a12, type: 3}
   - {fileID: 8300000, guid: 79d8b4a96b8657348bcf7ebe868a5fc7, type: 3}

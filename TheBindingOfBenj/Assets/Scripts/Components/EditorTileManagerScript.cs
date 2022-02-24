@@ -73,22 +73,22 @@ public class EditorTileManagerScript : MonoBehaviour
 
     private void LoadLevels()
     {
-        var levels = Directory.GetFiles(@"Assets\Resources\Rooms\", "*.json");
+        var levels = Directory.GetFiles(@"Assets\Resources\Rooms\", "*.json", SearchOption.AllDirectories);
 
 
         foreach (var l in levels)
         {
             var levelName = Path.GetFileNameWithoutExtension(l);
             var button = Instantiate(_levelButtonPrefab, GameObject.Find("Content").transform);
-            button.GetComponent<Button>().onClick.AddListener(() => LoadLevel(levelName));
+            button.GetComponent<Button>().onClick.AddListener(() => LoadLevel(l));
             button.GetComponentInChildren<TextMeshProUGUI>().text = levelName;
         }
     }
 
     public void LoadLevel(string name)
     {
-        var tiles = JsonConvert.DeserializeObject<List<Tile>>(File.ReadAllText($@"Assets\Resources\Rooms\{name}.json"));
-        _levelName.text = name;
+        var tiles = JsonConvert.DeserializeObject<List<Tile>>(File.ReadAllText(name));
+        _levelName.text = Path.GetFileNameWithoutExtension(name);
 
         foreach (var t in _tiles)
         {

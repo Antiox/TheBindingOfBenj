@@ -6,6 +6,9 @@ using UnityEngine;
 public class ProjectileGeneratorScript : MonoBehaviour
 {
     public Weapon Weapon { get; set; }
+
+    public LayerMask EnemyLayer { get; set; }
+
     private SpriteRenderer _spriteRenderer;
 
     public void LoadProjectile()

@@ -13,8 +13,10 @@ namespace GameLibrary
 
         public override IEnumerator Execute()
         {
+            yield return new WaitForSeconds(1f);
             while (true)
             {
+
                 var t = 0f;
                 var rand = Random.insideUnitCircle * 10;
                 var targetPosition = _player.transform.position + new Vector3(rand.x, rand.y, 0);

@@ -11,6 +11,8 @@ namespace GameLibrary
         public float Health;
         public bool IsFlying;
 
+        public Weapon Weapon;
+
         [HideInInspector]
         public IPattern pattern;
 

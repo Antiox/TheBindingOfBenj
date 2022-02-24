@@ -16,7 +16,7 @@ public class PlayerInteractionScript : MonoBehaviour
     void Update()
     {
         var collider = Physics2D.OverlapCircle(transform.position, 3, LayerMask.GetMask("Weapon"));
-        if (collider != null)
+        if (collider != null && collider.GetComponent<WeaponGeneratorScript>() != null)
         {
             if (Inputs.WeaponChange)
             {

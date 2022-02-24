@@ -14,8 +14,10 @@ namespace GameLibrary
 
         public override IEnumerator Execute()
         {
+            yield return new WaitForSeconds(1f);
             while (true)
             {
+
                 var t = 0f;
                 while (t < 1f)
                 {
@@ -24,7 +26,7 @@ namespace GameLibrary
                     yield return new WaitForEndOfFrame();
                 }
 
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSeconds(1f);
             }
         }
     }

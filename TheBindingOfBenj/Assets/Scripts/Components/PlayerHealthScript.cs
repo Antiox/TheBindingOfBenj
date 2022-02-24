@@ -19,17 +19,30 @@ public class PlayerHealthScript : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag(Tags.Enemy) && !_isImmune)
-        {
-            _currentHealth--;
+        if (!_isImmune && (collision.gameObject.CompareTag(Tags.Enemy))) Hurt();
+    }
 
-            if(_currentHealth <= 0)
-                EventManager.Instance.Dispatch(new OnPlayerKilled());
-            else
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        var projectileBehaviour = collision.gameObject.GetComponent<ProjectileBehaviourScript>();
+        if (projectileBehaviour != null) 
+            if (projectileBehaviour.EnemyLayer == (projectileBehaviour.EnemyLayer | (1 << gameObject.layer)))
             {
-                EventManager.Instance.Dispatch(new OnPlayerHurted(_maxHealth, _currentHealth));
-                StartCoroutine(WaitForImmunityFrames());
+                Hurt();
+                Destroy(collision.gameObject);
             }
+    }
+
+    private void Hurt()
+    {
+        _currentHealth--;
+
+        if (_currentHealth <= 0)
+            EventManager.Instance.Dispatch(new OnPlayerKilled());
+        else
+        {
+            EventManager.Instance.Dispatch(new OnPlayerHurted(_maxHealth, _currentHealth));
+            StartCoroutine(WaitForImmunityFrames());
         }
     }
 

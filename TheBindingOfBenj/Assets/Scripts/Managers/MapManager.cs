@@ -40,7 +40,6 @@ namespace GameLibrary
 
         #endregion
 
-
         public void Start()
         {
             GenerateMap();
@@ -99,6 +98,7 @@ namespace GameLibrary
             // création des chemins entre les salles
             ConnectAllRooms();
 
+            // ouvre les portes des salles inutilisées
             CleanUselessRooms();
         }
 
@@ -114,15 +114,19 @@ namespace GameLibrary
             }
         }
 
+        /// <summary>
+        /// charge les prefabs de salles
+        /// </summary>
         private void LoadRoomsConfiguration()
         {
-            var rooms = Resources.LoadAll("Rooms");
-            var obstacles = Resources.LoadAll("Prefabs/Obstacles/Rocks");
-            var weapons = Resources.LoadAll<Weapon>("Scriptables");
+            var normalRooms = Resources.LoadAll("Rooms/NormalRooms").ToList();
+            var bossRooms = Resources.LoadAll("Rooms/BossRooms").ToList();
+            var obstacles = Resources.LoadAll("Prefabs/Obstacles/Rocks").ToList();
+            var playerWeapons = Resources.LoadAll<Weapon>("Scriptables/Weapons/PlayerWeapons").ToList();
             
-            foreach (var room in _specialRooms.Where(room => room.Value.Type == RoomType.Other && room.Key.EndsWith("_0_0")))
+            foreach (var room in _specialRooms.Where(room => (room.Value.Type == RoomType.Other || room.Value.Type == RoomType.Boss) && room.Key.EndsWith("_0_0")))
             {
-                var tiles = JsonConvert.DeserializeObject<List<Tile>>(File.ReadAllText("Assets/Resources/Rooms/" + rooms[Random.Range(0, rooms.Length)].name + ".json"));
+                var tiles = JsonConvert.DeserializeObject<List<Tile>>(File.ReadAllText("Assets/Resources/Rooms/" + (room.Value.Type == RoomType.Other ? "NormalRooms/" + normalRooms.GetRandom().name : "BossRooms/" + bossRooms.GetRandom().name) + ".json"));
                 foreach (var tile in tiles)
                 {
                     var pos = new Vector2(room.Value.Coordinates.x * room.Value.CellSize.x + tile.X * 7 - 5, 
@@ -130,16 +134,16 @@ namespace GameLibrary
                     switch (tile.Type)
                     {
                         case TileType.Obstacle:
-                            Object.Instantiate(obstacles[Random.Range(0, obstacles.Length)], pos, Quaternion.identity, GameObject.Find("Obstacles").transform);
+                            Object.Instantiate(obstacles.GetRandom(), pos, Quaternion.identity, GameObject.Find("Obstacles").transform);
                             break;
                         case TileType.Weapon:
                             var weapon = Object.Instantiate(Resources.Load("Prefabs/Weapon"), pos, Quaternion.identity, GameObject.Find("Weapons").transform) as GameObject;
-                            weapon.GetComponent<WeaponGeneratorScript>().Weapon = weapons[Random.Range(0, weapons.Length)];
+                            weapon.GetComponent<WeaponGeneratorScript>().Weapon = playerWeapons.GetRandom();
                             break;
                         case TileType.Loot:
                             break;
-                        case TileType.Monster:
-                            room.Value.MonstersPositions.Add(pos);
+                        case TileType.Monster: case TileType.Boss:
+                            room.Value.MonstersPositions.Add(pos); // stocke les positions des ennemis à fair spawn si on entre dans la salle
                             break;
                         case TileType.Hole:
                             Object.Instantiate(Resources.Load("Prefabs/Obstacles/Hole/Hole"), pos, Quaternion.identity, GameObject.Find("Holes").transform);
@@ -151,6 +155,9 @@ namespace GameLibrary
             }
         }
 
+        /// <summary>
+        /// fait la connexion entre les salles
+        /// </summary>
         private void ConnectAllRooms()
         {
             // chaque salle différente
@@ -204,6 +211,9 @@ namespace GameLibrary
             }
         }
 
+        /// <summary>
+        /// détruit toute la map
+        /// </summary>
         private void ClearMap()
         {
             foreach (Transform roomObject in _roomContainer.transform)
@@ -212,6 +222,12 @@ namespace GameLibrary
             }
         }
 
+        /// <summary>
+        /// ajoute une salle spéciale de manière aléatoire selon un prédicat
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="predicate"></param>
+        /// <param name="type"></param>
         private void AddSpecialRoom(string name, System.Predicate<Vector2[]> predicate, RoomType type)
         {
             //var size = new Vector2(Random.Range(1, 3) * 2 + 1, Random.Range(1, 3) * 2 + 1);
@@ -229,6 +245,7 @@ namespace GameLibrary
 
                     var roomName = "";
 
+                    // créer les triggers utilisés pour déclencher le spawn des ennemis dans une salle et la fermeture des portes
                     void InstanciateWallTrigger(int index, float xOffset, float yOffset)
                     {
                         var res = (Object.Instantiate(Resources.Load("Prefabs/WallTrigger"), room.transform.GetChild(index).transform.position, Quaternion.identity, room.transform.GetChild(index)) as GameObject).transform;
@@ -278,6 +295,9 @@ namespace GameLibrary
             }
         }
 
+        /// <summary>
+        /// génère une grille vierge
+        /// </summary>
         private void GenerateBlankMap()
         {
             for (int i = 0; i < _columnCount; i++)
@@ -298,7 +318,7 @@ namespace GameLibrary
 
         /// <summary>
         /// renvoie un string équivalant au radical de la salle (ex : OtherRoom5)
-        /// et le roomScript associé à la base de la salle (ex : OtherRoom5_0_0)
+        /// et le roomScript associé à la base de la salle (exemple : OtherRoom5_0_0)
         /// </summary>
         /// <param name="room"></param>
         /// <returns></returns>
@@ -415,9 +435,13 @@ namespace GameLibrary
             }
         }
 
+        /// <summary>
+        /// ouvre les portes à partir de la salle racine (exemple : OtherRoom2_0_0)
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="openClose"></param>
         public void OpenCloseDoorFromRoot(RoomScript root, bool openClose)
         {
-            // à revoir
             if (root.OpenedDoors.HasFlag(DoorType.Up)) _specialRooms[GetRoomRoot(root).Key + "_Up"].OpenCloseDoors(DoorType.Up, openClose);
             if (root.OpenedDoors.HasFlag(DoorType.Down)) _specialRooms[GetRoomRoot(root).Key + "_Down"].OpenCloseDoors(DoorType.Down, openClose); ;
             if (root.OpenedDoors.HasFlag(DoorType.Right)) _specialRooms[GetRoomRoot(root).Key + "_Right"].OpenCloseDoors(DoorType.Right, openClose); ;
@@ -431,7 +455,6 @@ namespace GameLibrary
         /// <param name="to"></param>
         private void ConnectTwoRooms(RoomScript from, RoomScript to)
         {
-
             // on réinitialise à chaque fois la grille : l'heuristique, meilleure cout et parent;
             for (int i = 0; i < _columnCount; i++)
             {
@@ -539,14 +562,12 @@ namespace GameLibrary
                                 if (parentRoomRoot != null) parentRoomRoot.OpenedDoors |= doorsToOpenParent;
                                 if (currentRoomRoot != null) currentRoomRoot.OpenedDoors |= doorsToOpen;
                             }
-
                             currentNode = currentNode.Parent;
                         }
                         return;
                     }
                 }
             }
-
         }
     }
 }

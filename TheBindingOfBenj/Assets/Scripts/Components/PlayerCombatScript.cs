@@ -12,7 +12,9 @@ namespace GameLibrary
             base.Update();
             if (Inputs.Attack)
             {
-                Attack(Inputs.MousePosition);
+                var posScreen = Camera.main.ScreenToWorldPoint(Inputs.MousePosition);
+                posScreen.z = transform.position.z;
+                Attack(posScreen);
             }
         }
 

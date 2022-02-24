@@ -14,8 +14,10 @@ namespace GameLibrary
 
         public override IEnumerator Execute()
         {
+            yield return new WaitForSeconds(1f);
             while (true)
             {
+
                 _enemy.transform.position = _player.transform.position + (_enemy.transform.position - _player.transform.position).normalized * 10f;
                 _enemy.transform.RotateAround(_player.transform.position, Vector3.forward, 90f * Time.deltaTime);
                 var q = _enemy.transform.rotation;

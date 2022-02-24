@@ -13,6 +13,7 @@ namespace GameLibrary
 
         public override IEnumerator Execute()
         {
+            yield return new WaitForSeconds(1f);
             while (true)
             {
                 var rand = Random.insideUnitCircle * 10;
@@ -20,7 +21,11 @@ namespace GameLibrary
                 
                 _enemy.transform.position = targetPosition;
 
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSeconds(1f);
+
+                _enemy.GetComponent<EnemyBehaviorScript>().Attack(_player.transform.position);
+
+                yield return new WaitForSeconds(0.2f);
             }
         }
     }

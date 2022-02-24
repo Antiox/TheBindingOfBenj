@@ -129,6 +129,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a4202a142511c469dc85cd22303c2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _equipedWeapon: {fileID: 11400000, guid: 5d821506537841f42b40ab0d1ae695f5, type: 2}
+  _enemyMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &6373664554430335276
 MonoBehaviour:
   m_ObjectHideFlags: 0

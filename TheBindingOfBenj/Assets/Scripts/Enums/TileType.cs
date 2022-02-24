@@ -14,6 +14,7 @@ namespace GameLibrary
         Monster = 2,
         Loot = 3,
         Weapon = 4,
-        Hole = 5
+        Hole = 5,
+        Boss = 6
     }
 }

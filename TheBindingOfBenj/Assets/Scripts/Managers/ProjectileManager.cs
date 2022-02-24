@@ -36,19 +36,26 @@ namespace GameLibrary
         {
         }
 
-        private void SpawnProjectiles(Vector3 position, Vector3 target, Weapon weapon)
+        /// <summary>
+        /// spawn les projectiles selon le type de l'arme
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="target"></param>
+        /// <param name="weapon"></param>
+        /// <param name="enemyLayer"></param>
+        private void SpawnProjectiles(Vector3 position, Vector3 target, Weapon weapon, LayerMask enemyLayer)
         {
             switch (weapon.RangedType)
             {
                 case RangedType.Basic:
-                    SpawnProjectile(position, target, weapon);
+                    SpawnProjectile(position, target, weapon, enemyLayer);
                     break;
                 case RangedType.Spread:
                     var angleBetweenProjectiles = weapon.Spread / weapon.ProjectileCount;
                     for (int i = 0; i < weapon.ProjectileCount; i++)
                     {
                         var rotatedTarget = Utility.RotatePointAroundPivot(Utility.RotatePointAroundPivot(target, position, new Vector3(0, 0, i * angleBetweenProjectiles)), position, new Vector3(0, 0, -(weapon.Spread - angleBetweenProjectiles) / 2));
-                        SpawnProjectile(position, rotatedTarget, weapon);
+                        SpawnProjectile(position, rotatedTarget, weapon, enemyLayer);
                     }
                     break;
             }
@@ -57,10 +64,11 @@ namespace GameLibrary
         /// <summary>
         /// instancie un projectile 
         /// </summary>
-        /// <param name="position"></param>
-        /// <param name="target"></param>
+        /// <param name="position">position à laquelle on tire</param>
+        /// <param name="target">cible</param>
         /// <param name="weapon">permet de savoir la projectile à instancier</param>
-        private void SpawnProjectile(Vector3 position, Vector3 target, Weapon weapon)
+        /// <param name="enemyLayer">layers ennemies</param>
+        private void SpawnProjectile(Vector3 position, Vector3 target, Weapon weapon, LayerMask enemyLayer)
         {
             position += Vector3.back;
             target += Vector3.back;
@@ -70,12 +78,13 @@ namespace GameLibrary
 
             var projectile = Object.Instantiate(Resources.Load<GameObject>("Prefabs/GenericProjectile"), position + direction.normalized, Quaternion.AngleAxis(angle, Vector3.forward), GameObject.Find("Projectiles").transform);
 
-            var projectileTemplate = Resources.Load<Weapon>($"Scriptables/{weapon.name}");
+            var projectileTemplate = Resources.LoadAll<Weapon>("Scriptables/Weapons/").Where(x => x.name == weapon.name).First();
 
             var rendererScript = projectile.GetComponent<ProjectileGeneratorScript>();
 
             rendererScript.Weapon = projectileTemplate.Clone();
             rendererScript.Weapon.Pattern = GetPattern(projectileTemplate.ProjectileType, projectile, target, projectileTemplate.Speed, projectileTemplate.HomingRadius);
+            rendererScript.EnemyLayer = enemyLayer;
 
             rendererScript.LoadProjectile();
         }
@@ -93,7 +102,7 @@ namespace GameLibrary
 
         private void ProjectileSpawnRequested(OnProjectileSpawnRequested e)
         {
-            SpawnProjectiles(e.Position, e.Target, e.Weapon);
+            SpawnProjectiles(e.Position, e.Target, e.Weapon, e.EnemyLayer);
         }
     }
 }

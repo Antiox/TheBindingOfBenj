@@ -6,6 +6,7 @@
         BasicEnemy2,
         BasicEnemy3,
         RandomTowards,
-        Teleport
+        Teleport,
+        Necromancer
     }
 }

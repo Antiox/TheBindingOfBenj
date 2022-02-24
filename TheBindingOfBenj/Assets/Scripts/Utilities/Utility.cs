@@ -74,13 +74,5 @@ namespace GameLibrary
             var dir = Quaternion.Euler(angles) * (point - pivot);
             return dir + pivot;
         }
-
-
-        public static T RandomEnum<T>()
-        {
-            var types = (T[])System.Enum.GetValues(typeof(T));
-            return (T)types[Random.Range(0, types.Length)];
-        }
-
     }
 }

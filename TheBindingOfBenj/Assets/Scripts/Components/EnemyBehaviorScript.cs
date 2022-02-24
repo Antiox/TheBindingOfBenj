@@ -3,22 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBehaviorScript : MonoBehaviour
+public class EnemyBehaviorScript : Entity
 {
     private float _health;
-    private CircleCollider2D _collider;
     private SpriteRenderer _renderer;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         EventManager.Instance.AddListener<OnEnemyHurt>(EnemyHurt);
     }
 
     private void Start()
     {
         _renderer = GetComponent<SpriteRenderer>();
-        _collider = GetComponent<CircleCollider2D>();
         var generatorScript = GetComponent<EnemyGeneratorScript>();
+        _equipedWeapon = generatorScript.Enemy.Weapon;
         _health = generatorScript.Enemy.Health;
 
         StartCoroutine(generatorScript.Enemy.pattern.Execute());

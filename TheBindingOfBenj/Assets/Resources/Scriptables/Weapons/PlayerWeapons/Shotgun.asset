@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7fa1fabae5dfe24daad92db77a7363b, type: 3}
+  m_Name: Shotgun
+  m_EditorClassIdentifier: 
+  WeaponType: 1
+  WeaponSprite: {fileID: 21300000, guid: c93b63870435bed4dac5f66d085deca7, type: 3}
+  Damage: 1
+  Cooldown: 1.3
+  Range: 0
+  RangedType: 1
+  Spread: 30
+  ProjectileCount: 15
+  Speed: 90
+  Radius: 1
+  Length: 1
+  Duration: 5
+  ProjectileSprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
+  ProjectileType: 0
+  HomingRadius: 0
+  EnemyImpact:
+  - {fileID: 8300000, guid: e4b7060943986e54783694b4e56f0369, type: 3}
+  - {fileID: 8300000, guid: ba9c84442f18dd14e89fc2c33771eb67, type: 3}
+  - {fileID: 8300000, guid: 66d6c3797659aea4ca6f8ec81704182f, type: 3}
+  - {fileID: 8300000, guid: 7ddcaa682eacb014b90d647aadff32b7, type: 3}
+  - {fileID: 8300000, guid: c4899f250328c414f90a2cd21652ff8c, type: 3}
+  - {fileID: 8300000, guid: 310a4b861862db44896157ba3193cf00, type: 3}
+  - {fileID: 8300000, guid: 93da34270376ef645bc30599852408cd, type: 3}
+  - {fileID: 8300000, guid: 3d58cbc77a37cfc47918409ca1eb96b6, type: 3}
+  - {fileID: 8300000, guid: 0c85a02a4ae77df4f88ec0acf858c0a9, type: 3}
+  - {fileID: 8300000, guid: e0c2f5a021349004290d420924df21d2, type: 3}
+  WallImpact:
+  - {fileID: 8300000, guid: 961af395224f37b4ca5acc4ff7829591, type: 3}
+  - {fileID: 8300000, guid: 9b591dad8e7575640ac823ebdfce5358, type: 3}
+  - {fileID: 8300000, guid: c78095ca42e155141ba780c4ae975769, type: 3}
+  - {fileID: 8300000, guid: e3425e55509c6cf4caebaed12f8cd845, type: 3}
+  - {fileID: 8300000, guid: 920ae80ddd3c85a4e8eda1812e4a6258, type: 3}
+  - {fileID: 8300000, guid: 12d1352a978e6334fb4eda7223276bbc, type: 3}
+  - {fileID: 8300000, guid: d75773a9ebf93b246a70d5773beba4fb, type: 3}
+  - {fileID: 8300000, guid: 1edbe3b7c6edacc43bf1b8e85b06a05e, type: 3}

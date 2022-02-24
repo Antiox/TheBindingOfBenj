@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7fa1fabae5dfe24daad92db77a7363b, type: 3}
-  m_Name: HomingShotgun
+  m_Name: AdminWeapon
   m_EditorClassIdentifier: 
   WeaponType: 1
-  WeaponSprite: {fileID: 21300000, guid: f50de359de2d6234890a58ada0114056, type: 3}
-  Damage: 1.2
-  Cooldown: 1
+  WeaponSprite: {fileID: 21300000, guid: f7c366efe82469748b8e0ffca40a832f, type: 3}
+  Damage: 50
+  Cooldown: 0.2
   Range: 0
   RangedType: 1
-  Spread: 70
+  Spread: 30
   ProjectileCount: 10
-  Speed: 90
+  Speed: 400
   Radius: 1
   Length: 1
-  Duration: 5
+  Duration: 30
   ProjectileSprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
   ProjectileType: 1
-  HomingRadius: 3.4
+  HomingRadius: 60
   EnemyImpact:
   - {fileID: 8300000, guid: e4b7060943986e54783694b4e56f0369, type: 3}
   - {fileID: 8300000, guid: ba9c84442f18dd14e89fc2c33771eb67, type: 3}

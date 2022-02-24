@@ -12,13 +12,15 @@ namespace GameLibrary
         public Weapon Weapon { get; set; }
         public Vector3 Position { get; set; }
         public Vector3 Target { get; set; }
+        public LayerMask EnemyLayer { get; set; }
 
 
-        public OnProjectileSpawnRequested(Weapon weapon, Vector3 position, Vector3 target)
+        public OnProjectileSpawnRequested(Weapon weapon, Vector3 position, Vector3 target, LayerMask enemyLayer)
         {
             Position = position;
             Target = target;
             Weapon = weapon;
+            EnemyLayer = enemyLayer;
         }
     }
 }

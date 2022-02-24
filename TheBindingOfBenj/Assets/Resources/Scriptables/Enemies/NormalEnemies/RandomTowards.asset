@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9617ceb035ee3e2418312064cfb822cd, type: 3}
-  m_Name: Teleport
+  m_Name: RandomTowards
   m_EditorClassIdentifier: 
-  artwork: {fileID: 21300000, guid: ba20025840d5c184784e2355445494b9, type: 3}
-  Health: 40
+  artwork: {fileID: 21300000, guid: 0988f988c2ee94241863be2c9bc128c1, type: 3}
+  Health: 30
   IsFlying: 0
-  Impact: {fileID: 0}
+  Weapon: {fileID: 0}
+  Impact: {fileID: 125648, guid: 4ec747ed5da0c5842acf382604be0371, type: 3}
   DeathSound:
   - {fileID: 8300000, guid: 8205643392935c54d99e90dc01467a12, type: 3}
   - {fileID: 8300000, guid: 79d8b4a96b8657348bcf7ebe868a5fc7, type: 3}

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9617ceb035ee3e2418312064cfb822cd, type: 3}
+  m_Name: Necromancer
+  m_EditorClassIdentifier: 
+  artwork: {fileID: 21300000, guid: f0cdeb52ff3897e4bbd9f46d505d41bd, type: 3}
+  Health: 300
+  IsFlying: 0
+  Weapon: {fileID: 11400000, guid: e4094934bc380254dbf62388255b6474, type: 2}
+  Impact: {fileID: 125648, guid: 4ec747ed5da0c5842acf382604be0371, type: 3}
+  DeathSound:
+  - {fileID: 8300000, guid: e4b7060943986e54783694b4e56f0369, type: 3}
+  - {fileID: 8300000, guid: ba9c84442f18dd14e89fc2c33771eb67, type: 3}
+  - {fileID: 8300000, guid: 66d6c3797659aea4ca6f8ec81704182f, type: 3}
+  - {fileID: 8300000, guid: 7ddcaa682eacb014b90d647aadff32b7, type: 3}
+  - {fileID: 8300000, guid: c4899f250328c414f90a2cd21652ff8c, type: 3}
+  - {fileID: 8300000, guid: 310a4b861862db44896157ba3193cf00, type: 3}
+  - {fileID: 8300000, guid: 93da34270376ef645bc30599852408cd, type: 3}
+  - {fileID: 8300000, guid: 3d58cbc77a37cfc47918409ca1eb96b6, type: 3}
+  - {fileID: 8300000, guid: 0c85a02a4ae77df4f88ec0acf858c0a9, type: 3}
+  - {fileID: 8300000, guid: e0c2f5a021349004290d420924df21d2, type: 3}

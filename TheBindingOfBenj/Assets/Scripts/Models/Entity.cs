@@ -21,12 +21,19 @@ namespace GameLibrary
             _timeSinceLastAttack += Time.deltaTime;
         }
 
-        protected void Attack(Vector2 pos)
+        /// <summary>
+        /// lance une attaque selon l'arme equipée
+        /// utilisé par le joueur et par les ennemis
+        /// </summary>
+        /// <param name="pos">direction de l'attaque</param>
+        public void Attack(Vector2 pos)
         {
             if (_timeSinceLastAttack >= _equipedWeapon.Cooldown)
             {
+                // armes melee pas utilisées pour l'instant
                 if (_equipedWeapon.WeaponType == WeaponType.Melee)
                 {
+                    /*
                     Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, _equipedWeapon.Range, _enemyMask);
 
                     for (int i = 0; i < colliders.Length; i++)
@@ -42,21 +49,14 @@ namespace GameLibrary
                             colliders[i].gameObject.GetComponent<Entity>().Hurt(_equipedWeapon.Damage);
                         }
                     }
+                    */
                 }
                 else
                 {
-                    var posScreen = Camera.main.ScreenToWorldPoint(pos);
-                    posScreen.z = transform.position.z;
-                    EventManager.Instance.Dispatch(new OnProjectileSpawnRequested(_equipedWeapon, transform.position, posScreen));
+                    EventManager.Instance.Dispatch(new OnProjectileSpawnRequested(_equipedWeapon, transform.position, pos, _enemyMask));
                 }
                 _timeSinceLastAttack = 0;
             }
         }
-
-        protected void Hurt(float damage)
-        {
-            Debug.Log(gameObject + " recois " + damage);
-        }
-
     }
 }

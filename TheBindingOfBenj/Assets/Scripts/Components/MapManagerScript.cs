@@ -1,17 +1,21 @@
 using GameLibrary;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MapManagerScript : MonoBehaviour
 {
     private RoomScript _currentRoom;
+    public static List<EnemyType> AllBosses { get; private set; }
 
     private void Awake()
     {
         EventManager.Instance.AddListener<OnPlayerSpawnRequested>(SpawnPlayer);
         EventManager.Instance.AddListener<OnPlayerRoomChanged>(ChangeRoom);
         EventManager.Instance.AddListener<OnAllEnemiesKilled>(OpenDoors);
+        AllBosses = new List<EnemyType>();
+        AllBosses.Add(EnemyType.Necromancer);
     }
 
     private void SpawnPlayer(OnPlayerSpawnRequested e)
@@ -24,12 +28,19 @@ public class MapManagerScript : MonoBehaviour
         _currentRoom = MapManager.Instance.GetRoomRoot(e.Room).Value;
         if (_currentRoom != null)
         {
-            if (!_currentRoom.SpawnedEnemies && _currentRoom.Type != RoomType.Boss && _currentRoom.Type != RoomType.Spawn)
+            if (!_currentRoom.SpawnedEnemies && _currentRoom.Type != RoomType.Spawn)
             {
                 // spawn des nouveaux ennemis
                 foreach (var pos in _currentRoom.MonstersPositions)
                 {
-                    EventManager.Instance.Dispatch(new OnEnemySpawnRequested(pos, Utility.RandomEnum<EnemyType>()));
+                    var allTypes = System.Enum.GetValues(typeof(EnemyType)).Cast<EnemyType>();
+                    IEnumerable<EnemyType> types;
+
+                    if (_currentRoom.Type == RoomType.Boss) types = allTypes.Where(x => AllBosses.Contains(x));
+                    else types = allTypes.Where(x => !AllBosses.Contains(x));
+                    
+                    EventManager.Instance.Dispatch(new OnEnemySpawnRequested(pos, types.ElementAt(Random.Range(0, types.Count()))));
+
                     _currentRoom.SpawnedEnemies = true;
                 }
 

@@ -46,7 +46,7 @@ namespace GameLibrary
             var player = GameObject.FindGameObjectWithTag(Tags.Player);
             var enemy = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), position, Quaternion.identity, _enemiesContainer.transform);
 
-            var template = Resources.Load<Enemy>($"Scriptables/{type}");
+            var template = Resources.LoadAll<Enemy>("Scriptables/Enemies").Where(x => x.name == type.ToString()).First();
             var rendererScript = enemy.GetComponent<EnemyGeneratorScript>();
             rendererScript.Enemy = template.Clone();
             rendererScript.Enemy.pattern = GetPattern(type, enemy, player);
@@ -66,6 +66,7 @@ namespace GameLibrary
                 case EnemyType.BasicEnemy3: return new SpiningPattern(enemy, player);
                 case EnemyType.RandomTowards: return new RandomTowardsPlayerPattern(enemy, player);
                 case EnemyType.Teleport: return new TeleportPattern(enemy, player);
+                case EnemyType.Necromancer: return new NecromancerPattern(enemy, player);
                 default: return new GenericPattern(enemy, player);
             }
         }
