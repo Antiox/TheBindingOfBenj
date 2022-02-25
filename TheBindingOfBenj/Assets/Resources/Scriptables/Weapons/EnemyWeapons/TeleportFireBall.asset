@@ -22,9 +22,9 @@ MonoBehaviour:
   ProjectileCount: 0
   Speed: 50
   Radius: 1
-  Length: 1
+  Length: 0.5
   Duration: 10
-  ProjectileSprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+  ProjectileSprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
   ProjectileType: 0
   HomingRadius: 0
   EnemyImpact:
