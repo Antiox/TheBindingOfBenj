@@ -25,12 +25,14 @@ public class PlayerHealthScript : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         var projectileBehaviour = collision.gameObject.GetComponent<ProjectileBehaviourScript>();
-        if (projectileBehaviour != null) 
+        if (projectileBehaviour != null)
+        {
             if (projectileBehaviour.EnemyLayer == (projectileBehaviour.EnemyLayer | (1 << gameObject.layer)))
             {
                 Hurt();
                 Destroy(collision.gameObject);
             }
+        }
     }
 
     private void Hurt()

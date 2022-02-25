@@ -27,7 +27,7 @@ namespace GameLibrary
                 // rotation vers la direction
                 _source.transform.up = direction;
 
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
         }
     }

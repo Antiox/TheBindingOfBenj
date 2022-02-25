@@ -17,8 +17,8 @@ namespace GameLibrary
             var direction = (_target - _source.transform.position).normalized;
             while (true)
             {
-                _source.transform.position = Vector3.MoveTowards(_source.transform.position, _source.transform.position + direction, Time.deltaTime * _speed);
-                yield return new WaitForEndOfFrame();
+                _source.GetComponent<Rigidbody2D>().MovePosition(Vector3.MoveTowards(_source.transform.position, _source.transform.position + direction, Time.fixedDeltaTime * _speed));
+                yield return new WaitForFixedUpdate();
             }
         }
     }

@@ -64,7 +64,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4087
+    m_Bits: 12279
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -482,7 +482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40f7e3525e8db5f4aace8aaa499fed0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipedWeapon: {fileID: 11400000, guid: 5d821506537841f42b40ab0d1ae695f5, type: 2}
+  _equipedWeapon: {fileID: 11400000, guid: b3acec13cc8551c4bb0932091fe33910, type: 2}
   _enemyMask:
     serializedVersion: 2
     m_Bits: 512
