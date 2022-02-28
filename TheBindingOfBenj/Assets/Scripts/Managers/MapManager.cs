@@ -79,10 +79,13 @@ namespace GameLibrary
             // uniquement sur le coté opposé au spawn
             AddSpecialRoom("BossRoom", OnOppositeSide, RoomType.Boss);
 
-            for (int i = 0; i < 9; i++)
+            // ajoute une autre salle jusqu'à ce qu'on ne peut plus en caser
+            var i = 0;
+            do
             {
-                AddSpecialRoom("OtherRoom" + i, AwayFromOtherRooms, RoomType.Other);
+                i++;
             }
+            while (AddSpecialRoom("OtherRoom" + i, AwayFromOtherRooms, RoomType.Other));
 
             /// debug
             foreach (var item in _specialRooms)
@@ -174,9 +177,9 @@ namespace GameLibrary
             foreach (var room in roots)
             {
                 // récupere les salles les plus proches
-                var closestRooms = roots.Where(x => x.Value != room.Value && !x.Value.RoomsConnected.Contains(room.Value) && Vector2.Distance(x.Value.Coordinates, room.Value.Coordinates) <= _columnCount / 2).OrderBy(x => Vector2.Distance(x.Value.Coordinates, room.Value.Coordinates));
+                var closestRooms = roots.Where(x => x.Value != room.Value && !x.Value.RoomsConnected.Contains(room.Value) && Vector2.Distance(x.Value.Coordinates, room.Value.Coordinates) <= _columnCount / 2.5f).OrderBy(x => Vector2.Distance(x.Value.Coordinates, room.Value.Coordinates));
 
-                // connexion aux trois salles les plus proches
+                // connexion aux salles les plus proches
                 for (int i = 0; i < closestRooms.Count() - room.Value.RoomsConnected.Count; i++)
                 {
                     var fromString = GetRoomRoot(room.Value).Key;
@@ -228,7 +231,7 @@ namespace GameLibrary
         /// <param name="name"></param>
         /// <param name="predicate"></param>
         /// <param name="type"></param>
-        private void AddSpecialRoom(string name, System.Predicate<Vector2[]> predicate, RoomType type)
+        private bool AddSpecialRoom(string name, System.Predicate<Vector2[]> predicate, RoomType type)
         {
             //var size = new Vector2(Random.Range(1, 3) * 2 + 1, Random.Range(1, 3) * 2 + 1);
 
@@ -293,6 +296,9 @@ namespace GameLibrary
                     if (j > 0) Object.Destroy(room.DownDoor);
                 }
             }
+
+            // retourne s'il est possible de caser une autre salle
+            return RandomPossibleCoordinates(predicate, size) != Vector2.zero;
         }
 
         /// <summary>
@@ -346,13 +352,9 @@ namespace GameLibrary
                     if (predicate(new Vector2[] { res, size })) possibleValues.Add(res);
                 }
             }
+            var randomIndex = Random.Range(0, possibleValues.Count);
 
-            if (possibleValues.Count == 0)
-                throw new System.Exception("No possible coordinates found for " + predicate.Method);
-
-            var res2 = Random.Range(0, possibleValues.Count);
-
-            return possibleValues[res2];
+            return possibleValues.Count == 0 ? Vector2.zero : possibleValues[randomIndex];
         }
 
         /// <summary>
@@ -519,13 +521,12 @@ namespace GameLibrary
 
                             if (currentNode.Parent != null) // pour la dernière salle (qui n'a pas de parent)
                             {
-                                // augmentation de la pondération des salles où on est déjà passé et les salles adjacentes
-                                currentNode.Weight += 2;
+                                // augmentation de la pondération des salles adjacentes
                                 foreach (var currentNeighbour in currentNode.Neighbours)
                                 {
                                     if (!currentNode.Parent.Type.HasFlag(RoomType.Boss | RoomType.Spawn))
                                     {
-                                        currentNeighbour.Value.Weight += 10;
+                                        currentNeighbour.Value.Weight += 2;
                                     }
                                 }
 
