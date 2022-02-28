@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemyBehaviorScript : Entity
 {
     private float _health;
+    private float _maxHealth;
     private SpriteRenderer _renderer;
 
     protected override void Awake()
@@ -20,6 +21,7 @@ public class EnemyBehaviorScript : Entity
         var generatorScript = GetComponent<EnemyGeneratorScript>();
         _equipedWeapon = generatorScript.Enemy.Weapon;
         _health = generatorScript.Enemy.Health;
+        _maxHealth = generatorScript.Enemy.Health;
 
         StartCoroutine(generatorScript.Enemy.pattern.Execute());
     }
@@ -36,6 +38,8 @@ public class EnemyBehaviorScript : Entity
         {
             _health -= e.Damage;
             StartCoroutine(PlayHurtAnimation());
+
+            transform.Find("Canvas").Find("HealthBarShrink").GetComponent<EnemyHealthBarScript>().SetHealth(_health / _maxHealth);
 
             if (_health <= 0)
                 EventManager.Instance.Dispatch(new OnEnemyDied(e.GameObject, e.Enemy));
