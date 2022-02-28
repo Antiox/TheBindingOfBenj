@@ -16,10 +16,7 @@ namespace GameLibrary
             yield return new WaitForSeconds(1f);
             while (true)
             {
-                var rand = Random.insideUnitCircle * 10;
-                var targetPosition = _player.transform.position + new Vector3(rand.x, rand.y, 0);
-                
-                _enemy.transform.position = targetPosition;
+                _enemy.transform.position = Utility.RandomPointInAnnulus(_player.transform.position, 3f, 6f);
 
                 yield return new WaitForSeconds(1f);
 

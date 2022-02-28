@@ -12,6 +12,7 @@ TagManager:
   - Projectile
   - DeactivatedDoor
   - Hole
+  - SummoningEnemy
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - DeactivatedWall
   - Minimap
   - EnemyWeapon
-  - 
+  - SummoningEnemy
   - 
   - 
   - 

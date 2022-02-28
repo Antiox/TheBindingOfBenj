@@ -18,16 +18,12 @@ namespace GameLibrary
             yield return new WaitForSeconds(1f);
             while (true)
             {
-
-                var rand = Random.insideUnitCircle * 10;
-                var targetPosition = _player.transform.position + new Vector3(rand.x, rand.y, 0);
-
                 if (state)
                 {
                     state = false;
                     // mouvement : teleporte vers le joueur
 
-                    _enemy.transform.position = targetPosition;
+                    _enemy.transform.position = Utility.RandomPointInAnnulus(_player.transform.position, 3f, 6f);
                 
                     yield return new WaitForSeconds(1f);
 
@@ -41,11 +37,14 @@ namespace GameLibrary
 
                     var enemy = Utility.GetEnumValues<EnemyType>().Where(x => !MapManagerScript.AllBosses.Contains(x)).First();
 
-                    // spawn de deux ennemis identiques
-                    EventManager.Instance.Dispatch(new OnEnemySpawnRequested(targetPosition, enemy));
-                    EventManager.Instance.Dispatch(new OnEnemySpawnRequested(targetPosition, enemy));
+                    // spawn de trois ennemis identiques
+                    for (int i = 0; i < 3; i++)
+                    {
+                        EventManager.Instance.Dispatch(
+                            new OnEnemySpawnRequested(Utility.RandomPointInAnnulus(_player.transform.position, 5f, 8f), enemy, true));
+                    }
 
-                    yield return new WaitForSeconds(2.5f);
+                    yield return new WaitForSeconds(2f);
                 }
             }
         }

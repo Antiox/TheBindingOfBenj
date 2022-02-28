@@ -11,11 +11,13 @@ namespace GameLibrary
     {
         public Vector2 Position { get; set; }
         public EnemyType Type { get; set; }
+        public bool Summon { get; set; }
 
-        public OnEnemySpawnRequested(Vector2 position, EnemyType type)
+        public OnEnemySpawnRequested(Vector2 position, EnemyType type, bool summon)
         {
             Position = position;
             Type = type;
+            Summon = summon;
         }
     }
 }

@@ -143,7 +143,7 @@ namespace GameLibrary
                         case TileType.Loot:
                             break;
                         case TileType.Monster: case TileType.Boss:
-                            room.Value.MonstersPositions.Add(pos); // stocke les positions des ennemis à fair spawn si on entre dans la salle
+                            room.Value.MonstersPositions.Add(pos); // stocke les positions des ennemis à faire spawn si on entre dans la salle
                             break;
                         case TileType.Hole:
                             Object.Instantiate(Resources.Load("Prefabs/Obstacles/Hole/Hole"), pos, Quaternion.identity, GameObject.Find("Holes").transform);

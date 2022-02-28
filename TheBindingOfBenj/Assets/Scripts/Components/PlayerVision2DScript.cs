@@ -1,4 +1,5 @@
 using GameLibrary;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerVision2DScript : MonoBehaviour
@@ -21,15 +22,21 @@ public class PlayerVision2DScript : MonoBehaviour
     // Mesh qui correspond à la zone d'affichage de la lampe torche
     private Mesh fovMesh;
 
+    // utilisé pour savoir si un ennemi est éclairé par la lampe torche
+    private static List<GameObject> objectsInsideMesh;
+
     void Start()
     {
         fovMesh = new Mesh();
         fovMesh.name = "Fov Mesh";
         GetComponent<MeshFilter>().mesh = fovMesh;
+        objectsInsideMesh = new List<GameObject>();
     }
 
     void LateUpdate()
     {
+        objectsInsideMesh.Clear();
+
         // Récupération de la position de la souris
         var mousePosition = Camera.main.ScreenToWorldPoint(Inputs.MousePosition);
         mousePosition.z = 0;
@@ -54,6 +61,12 @@ public class PlayerVision2DScript : MonoBehaviour
             // Récupération du point d'impact du raycast
             var hit = Physics2D.Raycast(transform.position, rayDirection, direction.magnitude, ~ignoreMask);
 
+            // Ajout de tous les gameObjects dans la lampe torche
+            foreach (var item in Physics2D.RaycastAll(transform.position, rayDirection, direction.magnitude))
+            {
+                if (!objectsInsideMesh.Contains(item.collider.gameObject)) objectsInsideMesh.Add(item.collider.gameObject);
+            }
+
             // Construction du mesh
             vertices[i + 1] = hit.collider is null ? rayDirection : (Vector2)transform.InverseTransformPoint(hit.point + rayDirection.normalized * obstaclePenetration);
             if (i < raycastCount - 2)
@@ -68,5 +81,10 @@ public class PlayerVision2DScript : MonoBehaviour
         fovMesh.Clear();
         fovMesh.vertices = vertices;
         fovMesh.triangles = triangles;
+    }
+
+    public static bool IsGameObjectInsideFlashLight(GameObject gameObject)
+    {
+        return objectsInsideMesh.Contains(gameObject);
     }
 }

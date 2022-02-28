@@ -30,14 +30,14 @@ public class ProjectileBehaviourScript : MonoBehaviour
             EventManager.Instance.Dispatch(new OnEnemyHurt(collision.gameObject, enemy, _weapon.Damage));
             
             var angle = transform.rotation.eulerAngles.z + 180f;
-            var particles = Instantiate(Resources.Load("Prefabs/Particles/BloodSplatDirectional2D"), transform.position, Quaternion.Euler(0, 0, angle)) as GameObject;
+            var particles = Instantiate(Resources.Load("Prefabs/Particles/BloodSplatDirectional2D"), transform.position, Quaternion.Euler(0, 0, angle),  GameObject.Find("Particles").transform) as GameObject;
             AudioSource.PlayClipAtPoint(_weapon.EnemyImpact.GetRandom(), Camera.main.transform.position);
             Destroy(gameObject);
             Destroy(particles, 2f);
         }
         else if (collision.gameObject.tag != Tags.Player && collision.gameObject.tag != Tags.Projectile && collision.gameObject.tag != Tags.DeactivatedDoor && collision.gameObject.tag != Tags.Hole)
         {
-            var particles = Instantiate(Resources.Load("Prefabs/Particles/MetalHit2D"), transform.position, Quaternion.identity) as GameObject;
+            var particles = Instantiate(Resources.Load("Prefabs/Particles/MetalHit2D"), transform.position, Quaternion.identity, GameObject.Find("Particles").transform) as GameObject;
             AudioSource.PlayClipAtPoint(_weapon.WallImpact.GetRandom(), Camera.main.transform.position);
             if (_weapon.ProjectileType != ProjectileType.BouncingProjectile) Destroy(gameObject);
             Destroy(particles, 2f);

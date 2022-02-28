@@ -64,7 +64,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 12279
+    m_Bits: 28663
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -455,7 +455,7 @@ MonoBehaviour:
   obstaclePenetration: 0.4
   ignoreMask:
     serializedVersion: 2
-    m_Bits: 3648
+    m_Bits: 28224
 --- !u!114 &1183505447
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -71,14 +72,59 @@ namespace GameLibrary
             }
         }
 
+
         private void EnemySpawnRequested(OnEnemySpawnRequested e)
         {
-            SpawnEnemy(e.Position, e.Type);
+            if (e.Summon)
+            {
+                // lors du spawn d'un ennemi (non-boss) il y a d'abord une phase d'invocation, cette invocation peut être stoppée si on regarde l'ennemi avec la lampe torche
+                var summoningEnemy = Object.Instantiate(Resources.Load("Prefabs/SummoningEnemy"), e.Position, Quaternion.identity, _enemiesContainer.transform) as GameObject;
+                _enemies.Add(summoningEnemy);
+                CoroutineInterface.Instance.StartCoroutine(FlashLightOnEnemy(summoningEnemy));
+                CoroutineInterface.Instance.StartCoroutine(SummonEnemySpawn(e.Position, e.Type, summoningEnemy));
+            }
+            else SpawnEnemy(e.Position, e.Type);
+        }
+
+        private IEnumerator FlashLightOnEnemy(GameObject summoningEnemy)
+        {
+            var health = 20;
+            while (true)
+            {
+                if (PlayerVision2DScript.IsGameObjectInsideFlashLight(summoningEnemy))
+                {
+                    if (health-- < 0)
+                    {
+                        EventManager.Instance.Dispatch(new OnEnemyDied(summoningEnemy, Resources.Load<Enemy>("Scriptables/Enemies/SummoningEnemy")));
+                        yield break;
+                    }
+                }
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
+
+        private IEnumerator SummonEnemySpawn(Vector2 position, EnemyType type, GameObject summoningEnemy)
+        {
+            var t = 0f;
+            while (true)
+            {
+                t += Time.deltaTime;
+                if (summoningEnemy == null) yield break;
+                // spawn de l'ennemi si il s'est passé 3 secondes
+                if (t > 3)
+                {
+                    SpawnEnemy(position, type);
+                    Object.Destroy(summoningEnemy);
+                    _enemies.Remove(summoningEnemy);
+                    yield break;
+                }
+                yield return new WaitForEndOfFrame();
+            }
         }
 
         private void EnemyDied(OnEnemyDied e)
         {
-            var particles = Object.Instantiate(Resources.Load("Prefabs/Particles/BloodExplosion2D"), e.GameObject.transform.position, Quaternion.identity) as GameObject;
+            var particles = Object.Instantiate(Resources.Load("Prefabs/Particles/BloodExplosion2D"), e.GameObject.transform.position, Quaternion.identity, GameObject.Find("Particles").transform) as GameObject;
             AudioSource.PlayClipAtPoint(e.Enemy.DeathSound.GetRandom(), Camera.main.transform.position);
 
             _enemies.Remove(e.GameObject);

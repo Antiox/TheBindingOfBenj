@@ -74,5 +74,11 @@ namespace GameLibrary
             var dir = Quaternion.Euler(angles) * (point - pivot);
             return dir + pivot;
         }
+
+        public static Vector2 RandomPointInAnnulus(Vector2 point, float minRadius, float maxRadius)
+        {
+            return point + (Random.insideUnitCircle * point).normalized * Random.Range(minRadius, maxRadius);
+        }
+
     }
 }

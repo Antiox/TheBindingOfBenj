@@ -35,11 +35,16 @@ public class MapManagerScript : MonoBehaviour
                 {
                     var allTypes = System.Enum.GetValues(typeof(EnemyType)).Cast<EnemyType>();
                     IEnumerable<EnemyType> types;
+                    bool summon = false;
 
                     if (_currentRoom.Type == RoomType.Boss) types = allTypes.Where(x => AllBosses.Contains(x));
-                    else types = allTypes.Where(x => !AllBosses.Contains(x));
-                    
-                    EventManager.Instance.Dispatch(new OnEnemySpawnRequested(pos, types.ElementAt(Random.Range(0, types.Count()))));
+                    else
+                    {
+                        types = allTypes.Where(x => !AllBosses.Contains(x));
+                        summon = true;
+                    }
+
+                    EventManager.Instance.Dispatch(new OnEnemySpawnRequested(pos, types.ElementAt(Random.Range(0, types.Count())), summon));
 
                     _currentRoom.SpawnedEnemies = true;
                 }
