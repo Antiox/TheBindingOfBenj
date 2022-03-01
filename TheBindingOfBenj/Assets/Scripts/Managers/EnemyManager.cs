@@ -124,12 +124,12 @@ namespace GameLibrary
 
         private void EnemyDied(OnEnemyDied e)
         {
-            var particles = Object.Instantiate(Resources.Load("Prefabs/Particles/BloodExplosion2D"), e.GameObject.transform.position, Quaternion.identity, GameObject.Find("Particles").transform) as GameObject;
+            ParticleManager.Instance.InstanciateParticle("BloodExplosion2D", e.GameObject.transform.position, Quaternion.identity, 2f);
+
             AudioSource.PlayClipAtPoint(e.Enemy.DeathSound.GetRandom(), Camera.main.transform.position);
 
             _enemies.Remove(e.GameObject);
             Object.Destroy(e.GameObject);
-            Object.Destroy(particles, 2f);
 
             if (_enemies.Count == 0) EventManager.Instance.Dispatch(new OnAllEnemiesKilled());
         }

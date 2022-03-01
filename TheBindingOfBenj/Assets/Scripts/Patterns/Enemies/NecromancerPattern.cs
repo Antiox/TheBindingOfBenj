@@ -24,14 +24,20 @@ namespace GameLibrary
                 {
                     state++;
 
-                    // mouvement : teleporte vers le joueur
-                    _enemy.transform.position = Utility.RandomPointInAnnulus(_player.transform.position, 3f, 6f);
-                
-                    // temps entre le tp et l'attaque
+                    var teleportPoint = Utility.RandomPointInAnnulus(_player.transform.position, 3f, 6f);
+
+                    ParticleManager.Instance.InstanciateParticle("MagicAuraPurple", teleportPoint, Quaternion.identity, 1f);
+
+                    // temps du tp
                     yield return new WaitForSeconds(1f);
 
+                    // mouvement : teleporte vers le joueur
+                    _enemy.transform.position = teleportPoint;
+
+                    // temps entre le tp et l'attaque
+                    yield return new WaitForSeconds(0.2f);
+
                     _enemy.GetComponent<EnemyBehaviorScript>().Attack(_player.transform.position);
-                    Debug.Log("attaque");
 
                     yield return new WaitForSeconds(0.2f);
                 }

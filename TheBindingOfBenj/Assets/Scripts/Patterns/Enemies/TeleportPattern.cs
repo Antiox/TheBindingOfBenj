@@ -16,7 +16,15 @@ namespace GameLibrary
             yield return new WaitForSeconds(1f);
             while (true)
             {
-                _enemy.transform.position = Utility.RandomPointInAnnulus(_player.transform.position, 3f, 6f);
+
+                var teleportPoint = Utility.RandomPointInAnnulus(_player.transform.position, 3f, 6f);
+
+                ParticleManager.Instance.InstanciateParticle("MagicAuraPurple", teleportPoint, Quaternion.identity, 2f);
+
+                // temps du tp
+                yield return new WaitForSeconds(2f);
+
+                _enemy.transform.position = teleportPoint;
 
                 yield return new WaitForSeconds(1f);
 
