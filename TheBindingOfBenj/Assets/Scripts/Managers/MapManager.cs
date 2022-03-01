@@ -81,11 +81,11 @@ namespace GameLibrary
 
             // ajoute une autre salle jusqu'à ce qu'on ne peut plus en caser
             var i = 0;
-            do
+            
+            while (AddSpecialRoom("OtherRoom" + i, AwayFromOtherRooms, RoomType.Other))
             {
                 i++;
             }
-            while (AddSpecialRoom("OtherRoom" + i, AwayFromOtherRooms, RoomType.Other));
 
             /// debug
             foreach (var item in _specialRooms)
@@ -177,7 +177,7 @@ namespace GameLibrary
             foreach (var room in roots)
             {
                 // récupere les salles les plus proches
-                var closestRooms = roots.Where(x => x.Value != room.Value && !x.Value.RoomsConnected.Contains(room.Value) && Vector2.Distance(x.Value.Coordinates, room.Value.Coordinates) <= _columnCount / 2.5f).OrderBy(x => Vector2.Distance(x.Value.Coordinates, room.Value.Coordinates));
+                var closestRooms = roots.Where(x => x.Value != room.Value && !x.Value.RoomsConnected.Contains(room.Value) && Vector2.Distance(x.Value.Coordinates, room.Value.Coordinates) <= _columnCount / 2.7f).OrderBy(x => Vector2.Distance(x.Value.Coordinates, room.Value.Coordinates));
 
                 // connexion aux salles les plus proches
                 for (int i = 0; i < closestRooms.Count() - room.Value.RoomsConnected.Count; i++)
@@ -231,6 +231,7 @@ namespace GameLibrary
         /// <param name="name"></param>
         /// <param name="predicate"></param>
         /// <param name="type"></param>
+        /// <returns></returns>
         private bool AddSpecialRoom(string name, System.Predicate<Vector2[]> predicate, RoomType type)
         {
             //var size = new Vector2(Random.Range(1, 3) * 2 + 1, Random.Range(1, 3) * 2 + 1);
@@ -239,66 +240,68 @@ namespace GameLibrary
 
             var startCoord = RandomPossibleCoordinates(predicate, size);
 
-            for (int j = 0; j < size.y; j++)
+            if (startCoord != Vector2.zero)
             {
-                for (int i = 0; i < size.x; i++)
+                for (int j = 0; j < size.y; j++)
                 {
-                    var posRoom = new Vector2(i + startCoord.x, j + startCoord.y);
-                    var room = _map.Get(posRoom);
-
-                    var roomName = "";
-
-                    // créer les triggers utilisés pour déclencher le spawn des ennemis dans une salle et la fermeture des portes
-                    void InstanciateWallTrigger(int index, float xOffset, float yOffset)
+                    for (int i = 0; i < size.x; i++)
                     {
-                        var res = (Object.Instantiate(Resources.Load("Prefabs/WallTrigger"), room.transform.GetChild(index).transform.position, Quaternion.identity, room.transform.GetChild(index)) as GameObject).transform;
-                        res.position += new Vector3(xOffset, yOffset, 0);
-                    }
+                        var posRoom = new Vector2(i + startCoord.x, j + startCoord.y);
+                        var room = _map.Get(posRoom);
 
-                    if ((int) size.x / 2 == i)
-                    {
-                        if (j == size.y - 1)
+                        var roomName = "";
+
+                        // créer les triggers utilisés pour déclencher le spawn des ennemis dans une salle et la fermeture des portes
+                        void InstanciateWallTrigger(int index, float xOffset, float yOffset)
                         {
-                            roomName = name + "_Up";
-                            InstanciateWallTrigger(0, 0, -3f);
+                            var res = (Object.Instantiate(Resources.Load("Prefabs/WallTrigger"), room.transform.GetChild(index).transform.position, Quaternion.identity, room.transform.GetChild(index)) as GameObject).transform;
+                            res.position += new Vector3(xOffset, yOffset, 0);
                         }
-                        else if (j == 0)
+
+                        if ((int) size.x / 2 == i)
                         {
-                            roomName = name + "_Down";
-                            InstanciateWallTrigger(2, 0, 3f);
+                            if (j == size.y - 1)
+                            {
+                                roomName = name + "_Up";
+                                InstanciateWallTrigger(0, 0, -3f);
+                            }
+                            else if (j == 0)
+                            {
+                                roomName = name + "_Down";
+                                InstanciateWallTrigger(2, 0, 3f);
+                            }
                         }
-                    }
-                    else if ((int) size.y / 2 == j)
-                    {
-                        if (i == size.x - 1)
+                        else if ((int) size.y / 2 == j)
                         {
-                            roomName = name + "_Right";
-                            InstanciateWallTrigger(1, -3f, 0);
+                            if (i == size.x - 1)
+                            {
+                                roomName = name + "_Right";
+                                InstanciateWallTrigger(1, -3f, 0);
+                            }
+                            else if (i == 0)
+                            {
+                                roomName = name + "_Left";
+                                InstanciateWallTrigger(3, 3f, 0);
+                            }
                         }
-                        else if (i == 0)
-                        {
-                            roomName = name + "_Left";
-                            InstanciateWallTrigger(3, 3f, 0);
-                        }
-                    }
                     
-                    if (roomName == "") roomName = name + "_" + i + "_" + j;
+                        if (roomName == "") roomName = name + "_" + i + "_" + j;
 
-                    _specialRooms.Add(roomName, room);
-                    _specialRooms[roomName].Type = type;
-                    _specialRooms[roomName].Weight = 300;
-                    _specialRooms[roomName].Size = size;
+                        _specialRooms.Add(roomName, room);
+                        _specialRooms[roomName].Type = type;
+                        _specialRooms[roomName].Weight = 300;
+                        _specialRooms[roomName].Size = size;
 
-                    // ouverture des portes intérieures à la salle
-                    if (i < size.x - 1) Object.Destroy(room.RightDoor);
-                    if (i > 0) Object.Destroy(room.LeftDoor);
-                    if (j < size.y - 1) Object.Destroy(room.UpDoor);
-                    if (j > 0) Object.Destroy(room.DownDoor);
+                        // ouverture des portes intérieures à la salle
+                        if (i < size.x - 1) Object.Destroy(room.RightDoor);
+                        if (i > 0) Object.Destroy(room.LeftDoor);
+                        if (j < size.y - 1) Object.Destroy(room.UpDoor);
+                        if (j > 0) Object.Destroy(room.DownDoor);
+                    }
                 }
             }
 
-            // retourne s'il est possible de caser une autre salle
-            return RandomPossibleCoordinates(predicate, size) != Vector2.zero;
+            return startCoord != Vector2.zero;
         }
 
         /// <summary>
@@ -406,15 +409,13 @@ namespace GameLibrary
             var size = vectors[1];
             var res = true;
 
-            foreach (var room in _specialRooms)
+            foreach (var room in _specialRooms.Where(x => x.Key.EndsWith("_0_0")))
             {
-                for (int j = 0; j < size.y; j++)
-                {
-                    for (int i = 0; i < size.x; i++)
-                    {
-                        if (Vector2.Distance(room.Value.Coordinates, new Vector2(i + vector.x, j + vector.y)) <= 2) res = false;
-                    }
-                }
+                var centerRoom = new Vector2(room.Value.Coordinates.x + (int)room.Value.Size.x / 2, room.Value.Coordinates.y + (int)room.Value.Size.y / 2);
+
+                var centerRoomVector = new Vector2(vector.x + (int)size.x / 2, vector.y + (int)size.y / 2);
+
+                if (Vector2.Distance(centerRoom, centerRoomVector) <= 7) res = false;
             }
 
             return res && !_specialRooms.ContainsValue(_map.Get(vector)) && vector.x <= _columnCount - 2 - size.x && vector.y <= _rowCount - 2 - size.y;

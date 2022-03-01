@@ -15,7 +15,7 @@ MonoBehaviour:
   WeaponType: 1
   WeaponSprite: {fileID: 21300000, guid: 68915d8b98a8cd54ead55418ae829300, type: 3}
   Damage: 2
-  Cooldown: 0.15
+  Cooldown: 0.2
   Range: 10
   RangedType: 0
   Spread: 0

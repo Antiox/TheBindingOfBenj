@@ -11,30 +11,33 @@ namespace GameLibrary
     {
         public NecromancerPattern(GameObject enemy, GameObject player) : base(enemy, player) { }
 
-        private bool state = true;
+        // permet d'alterner entre deux modes (ratio : 2 mvts et atq / 1 invoc) : mouvements et attaque / invocation
+        private int state = 0;
 
         public override IEnumerator Execute()
         {
+            // temps avant de commencer le pattern
             yield return new WaitForSeconds(1f);
             while (true)
             {
-                if (state)
+                if (state < 2)
                 {
-                    state = false;
-                    // mouvement : teleporte vers le joueur
+                    state++;
 
+                    // mouvement : teleporte vers le joueur
                     _enemy.transform.position = Utility.RandomPointInAnnulus(_player.transform.position, 3f, 6f);
                 
+                    // temps entre le tp et l'attaque
                     yield return new WaitForSeconds(1f);
 
                     _enemy.GetComponent<EnemyBehaviorScript>().Attack(_player.transform.position);
+                    Debug.Log("attaque");
 
                     yield return new WaitForSeconds(0.2f);
                 }
                 else
                 {
-                    state = true;
-
+                    state = 0;
                     var enemy = Utility.GetEnumValues<EnemyType>().Where(x => !MapManagerScript.AllBosses.Contains(x)).First();
 
                     // spawn de trois ennemis identiques
@@ -44,6 +47,7 @@ namespace GameLibrary
                             new OnEnemySpawnRequested(Utility.RandomPointInAnnulus(_player.transform.position, 5f, 8f), enemy, true));
                     }
 
+                    // temps d'invocation
                     yield return new WaitForSeconds(2f);
                 }
             }
