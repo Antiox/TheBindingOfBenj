@@ -18,6 +18,12 @@ public class ProjectileBehaviourScript : MonoBehaviour
         transform.localScale = new Vector3(_weapon.Radius, _weapon.Length, 1);
         Destroy(gameObject, _weapon.Duration);
 
+        if (_weapon.ParticlePrefab != null)
+        {
+            ParticleManager.Instance.InstanciateParticle(_weapon.ParticlePrefab.name, transform.position, transform.rotation, _weapon.Duration, gameObject);
+            GetComponent<SpriteRenderer>().enabled = false;
+        }
+
         StartCoroutine(_weapon.Pattern.Execute());
     }
 

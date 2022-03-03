@@ -20,13 +20,14 @@ MonoBehaviour:
   RangedType: 1
   Spread: 40
   ProjectileCount: 5
-  Speed: 30
+  Speed: 50
   Radius: 1
   Length: 0.5
   Duration: 10
   ProjectileSprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
   ProjectileType: 0
   HomingRadius: 0
+  ParticlePrefab: {fileID: 118508, guid: 51f7c6b4f35397146aa6cda067596053, type: 3}
   EnemyImpact:
   - {fileID: 8300000, guid: e4b7060943986e54783694b4e56f0369, type: 3}
   - {fileID: 8300000, guid: ba9c84442f18dd14e89fc2c33771eb67, type: 3}

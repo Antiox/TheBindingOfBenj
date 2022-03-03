@@ -26,9 +26,11 @@ namespace GameLibrary
             _particlesContainer = GameObject.Find("Particles");
         }
 
-        public void InstanciateParticle(string name, Vector3 position, Quaternion rotation, float destroyTime)
+        public void InstanciateParticle(string name, Vector3 position, Quaternion rotation, float destroyTime, GameObject parent = null)
         {
-            var particle = Object.Instantiate(Resources.Load("Prefabs/Particles/" + name), position, rotation, _particlesContainer.transform);
+            if (parent == null) parent = _particlesContainer;
+
+            var particle = Object.Instantiate(Resources.Load("Prefabs/Particles/" + name), position, rotation, parent.transform);
             Object.Destroy(particle, destroyTime);
         }
     }

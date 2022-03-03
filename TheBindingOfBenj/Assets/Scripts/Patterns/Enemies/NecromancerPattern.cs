@@ -20,7 +20,7 @@ namespace GameLibrary
             yield return new WaitForSeconds(1f);
             while (true)
             {
-                if (state < 2)
+                if (state < 3)
                 {
                     state++;
 
@@ -43,14 +43,18 @@ namespace GameLibrary
                 }
                 else
                 {
+                    yield return new WaitForSeconds(1f);
+
                     state = 0;
                     var enemy = Utility.GetEnumValues<EnemyType>().Where(x => !MapManagerScript.AllBosses.Contains(x)).First();
 
-                    // spawn de trois ennemis identiques
-                    for (int i = 0; i < 3; i++)
+                    // spawn des ennemis selon un triangle équilatéral
+                    var triangle = Utility.EquilateralTriangleFromCenter(_player.transform.position, 15, -22.5f);
+
+                    // spawn de trois ennemis
+                    for (int i = 0; i < triangle.Length; i++)
                     {
-                        EventManager.Instance.Dispatch(
-                            new OnEnemySpawnRequested(Utility.RandomPointInAnnulus(_player.transform.position, 5f, 8f), enemy, true));
+                        EventManager.Instance.Dispatch(new OnEnemySpawnRequested(triangle[i], enemy, true));
                     }
 
                     // temps d'invocation

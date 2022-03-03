@@ -80,7 +80,16 @@ namespace GameLibrary
         /// </summary>
         public ProjectileType ProjectileType;
 
+        /// <summary>
+        /// rayon de la tête chercheuse
+        /// </summary>
         public float HomingRadius;
+
+        /// <summary>
+        /// vfx
+        /// </summary>
+        public GameObject ParticlePrefab;
+
 
         public List<AudioClip> EnemyImpact;
         public List<AudioClip> WallImpact;

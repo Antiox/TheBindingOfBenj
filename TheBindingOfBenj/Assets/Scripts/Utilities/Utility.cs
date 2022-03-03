@@ -75,9 +75,33 @@ namespace GameLibrary
             return dir + pivot;
         }
 
+        /// <summary>
+        /// renvoie un point aléatoire dans l'annulus
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="minRadius"></param>
+        /// <param name="maxRadius"></param>
+        /// <returns></returns>
         public static Vector2 RandomPointInAnnulus(Vector2 point, float minRadius, float maxRadius)
         {
             return point + (Random.insideUnitCircle * point).normalized * Random.Range(minRadius, maxRadius);
+        }
+
+        /// <summary>
+        /// renvoie les coordonnées d'un triangle équilatéral selon le centre, longueur d'un coté et l'angle de rotation
+        /// </summary>
+        /// <param name="center"></param>
+        /// <param name="length"></param>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public static Vector2[] EquilateralTriangleFromCenter(Vector2 center, float length, float angle)
+        {
+            var triangle = new Vector2[3];
+            var R = length / Mathf.Sqrt(3);
+            triangle[0] = center + new Vector2(R * Mathf.Cos(angle + 2 * Mathf.PI / 3), R * Mathf.Sin(angle + 2 * Mathf.PI / 3));
+            triangle[1] = center + new Vector2(R * Mathf.Cos(angle), R * Mathf.Sin(angle));
+            triangle[2] = center + new Vector2(R * Mathf.Cos(angle + 4 * Mathf.PI / 3), R * Mathf.Sin(angle + 4 * Mathf.PI / 3));
+            return triangle;
         }
 
     }
