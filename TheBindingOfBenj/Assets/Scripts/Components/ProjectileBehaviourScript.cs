@@ -20,7 +20,7 @@ public class ProjectileBehaviourScript : MonoBehaviour
 
         if (_weapon.ParticlePrefab != null)
         {
-            ParticleManager.Instance.InstanciateParticle(_weapon.ParticlePrefab.name, transform.position, transform.rotation, _weapon.Duration, gameObject);
+            ParticleManager.Instance.InstanciateParticle(_weapon.ParticlePrefab.name, transform.position, transform.rotation * Quaternion.Euler(_weapon.ParticlePrefab.transform.eulerAngles), _weapon.Duration, gameObject);
             GetComponent<SpriteRenderer>().enabled = false;
         }
 
@@ -49,6 +49,12 @@ public class ProjectileBehaviourScript : MonoBehaviour
             AudioSource.PlayClipAtPoint(_weapon.WallImpact.GetRandom(), Camera.main.transform.position);
             if (_weapon.ProjectileType != ProjectileType.BouncingProjectile) Destroy(gameObject);
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (_weapon.ImpactParticle != null)
+            ParticleManager.Instance.InstanciateParticle(_weapon.ImpactParticle.name, transform.position, transform.rotation, 1);
     }
 
 }

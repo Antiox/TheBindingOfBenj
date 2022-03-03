@@ -87,6 +87,10 @@ namespace GameLibrary
             rendererScript.EnemyLayer = enemyLayer;
 
             rendererScript.LoadProjectile();
+
+            if (weapon.MuzzleParticle != null)
+                ParticleManager.Instance.InstanciateParticle(weapon.MuzzleParticle.name, position, Quaternion.LookRotation(direction, Vector3.back), 1f);
+
         }
 
         private IPattern GetPattern(ProjectileType type, GameObject source, Vector3 target, float speed, float homingRadius)

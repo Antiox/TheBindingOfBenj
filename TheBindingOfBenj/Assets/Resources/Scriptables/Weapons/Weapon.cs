@@ -89,6 +89,8 @@ namespace GameLibrary
         /// vfx
         /// </summary>
         public GameObject ParticlePrefab;
+        public GameObject ImpactParticle;
+        public GameObject MuzzleParticle;
 
 
         public List<AudioClip> EnemyImpact;

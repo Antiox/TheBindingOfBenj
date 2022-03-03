@@ -27,6 +27,9 @@ MonoBehaviour:
   ProjectileSprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
   ProjectileType: 0
   HomingRadius: 0
+  ParticlePrefab: {fileID: 193226, guid: b5794c0edfbb6e842bb1ca7941a8d810, type: 3}
+  ImpactParticle: {fileID: 195742, guid: c8b5f25f7972594428944bae29ec00e1, type: 3}
+  MuzzleParticle: {fileID: 152484, guid: 2b0646f4d7d51ef419df6171f9521418, type: 3}
   EnemyImpact:
   - {fileID: 8300000, guid: e4b7060943986e54783694b4e56f0369, type: 3}
   - {fileID: 8300000, guid: ba9c84442f18dd14e89fc2c33771eb67, type: 3}
