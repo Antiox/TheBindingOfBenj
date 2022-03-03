@@ -132,8 +132,10 @@ namespace GameLibrary
                 var tiles = JsonConvert.DeserializeObject<List<Tile>>(File.ReadAllText("Assets/Resources/Rooms/" + (room.Value.Type == RoomType.Other ? "NormalRooms/" + normalRooms.GetRandom().name : "BossRooms/" + bossRooms.GetRandom().name) + ".json"));
                 foreach (var tile in tiles)
                 {
-                    var pos = new Vector2(room.Value.Coordinates.x * room.Value.CellSize.x + tile.X * 7 - 5, 
-                                          room.Value.Coordinates.y * room.Value.CellSize.y + tile.Y * 7 - 5);
+                    var container = GameObject.Find("Obstacles").transform;
+                    var pos = new Vector3(room.Value.Coordinates.x * room.Value.CellSize.x + tile.X * 7 - 5, 
+                                          room.Value.Coordinates.y * room.Value.CellSize.y + tile.Y * 7 - 5
+                                          , container.position.z);
                     switch (tile.Type)
                     {
                         case TileType.Obstacle:
@@ -316,7 +318,7 @@ namespace GameLibrary
                     var roomPrefab = Resources.Load<GameObject>("Prefabs/Room");
                     var roomScript = roomPrefab.GetComponent<RoomScript>();
 
-                    var room = Object.Instantiate(roomPrefab, new Vector3(i * roomScript.CellSize.x, j * roomScript.CellSize.y, roomPrefab.transform.position.z), Quaternion.identity, _roomContainer.transform);
+                    var room = Object.Instantiate(roomPrefab, new Vector3(i * roomScript.CellSize.x, j * roomScript.CellSize.y, _roomContainer.transform.position.z), Quaternion.identity, _roomContainer.transform);
 
                     _map[i, j] = room.GetComponent<RoomScript>();
                     _map[i, j].Coordinates = new Vector2(i, j);

@@ -27,11 +27,15 @@ public class PlayerHealthScript : MonoBehaviour
         var projectileBehaviour = collision.gameObject.GetComponent<ProjectileBehaviourScript>();
         if (projectileBehaviour != null)
         {
-            if (projectileBehaviour.EnemyLayer == (projectileBehaviour.EnemyLayer | (1 << gameObject.layer)))
+            if (!_isImmune)
             {
-                Hurt();
-                Destroy(collision.gameObject);
+                if (projectileBehaviour.EnemyLayer == (projectileBehaviour.EnemyLayer | (1 << gameObject.layer)))
+                {
+                    Hurt();
+                    Destroy(collision.gameObject);
+                }
             }
+            else Physics2D.IgnoreCollision(collision.collider, GetComponent<Collider2D>());
         }
     }
 
