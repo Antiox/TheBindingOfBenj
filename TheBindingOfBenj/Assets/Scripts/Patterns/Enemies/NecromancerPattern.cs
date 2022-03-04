@@ -26,7 +26,7 @@ namespace GameLibrary
 
                     var teleportPoint = Utility.RandomPointInAnnulus(_player.transform.position, 3f, 6f);
 
-                    ParticleManager.Instance.InstanciateParticle("MagicAuraPurple", teleportPoint, Quaternion.identity, 1f);
+                    ParticleManager.Instance.InstanciateParticle("TeleportGlow", teleportPoint, Quaternion.identity, 1f);
 
                     // temps du tp
                     yield return new WaitForSeconds(1f);
