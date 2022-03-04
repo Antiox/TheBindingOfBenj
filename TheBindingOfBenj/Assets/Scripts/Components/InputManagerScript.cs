@@ -44,7 +44,7 @@ namespace GameLibrary
                 case "MouseMove": EventManager.Instance.Dispatch(new OnMouseMoved(e.ReadValue<Vector2>())); break;
                 case "Move": EventManager.Instance.Dispatch(new OnPlayerMoved(e.ReadValue<Vector2>())); break;
                 case "Attack": EventManager.Instance.Dispatch(new OnPlayerAttacked(e.ReadValueAsButton())); break;
-                case "WeaponChange": EventManager.Instance.Dispatch(new OnWeaponChanged(true)); break;
+                case "WeaponChange": EventManager.Instance.Dispatch(new OnWeaponChanged(e.ReadValueAsButton())); break;
             }
         }
 

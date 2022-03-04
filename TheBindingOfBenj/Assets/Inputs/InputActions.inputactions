@@ -34,11 +34,11 @@
                 },
                 {
                     "name": "WeaponChange",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "9f935acf-128d-4889-bd0e-4b6933e1980d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press(behavior=1)",
+                    "interactions": "Press(behavior=2)",
                     "initialStateCheck": false
                 }
             ],

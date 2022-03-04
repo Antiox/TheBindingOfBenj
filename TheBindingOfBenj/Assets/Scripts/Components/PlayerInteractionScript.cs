@@ -22,7 +22,6 @@ public class PlayerInteractionScript : MonoBehaviour
             {
                 _playerCombat.ChangeWeapon(collider.GetComponent<WeaponGeneratorScript>().Weapon);
                 Destroy(collider.gameObject);
-                Inputs.WeaponChange = false; // moche mais pas d'autre solution pour l'instant
             }
         }
     }
