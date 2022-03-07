@@ -7,6 +7,7 @@ namespace GameLibrary
     public class PlayerMovementScript : MonoBehaviour
     {
         private Rigidbody2D _rb;
+        private Animator _animator;
 
         [SerializeField] private float _maxVelocity;
         [SerializeField] private float _acceleration;
@@ -14,6 +15,7 @@ namespace GameLibrary
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
+            _animator = GetComponentInChildren<Animator>();
         }
 
         private void Update()
@@ -28,11 +30,23 @@ namespace GameLibrary
 
         private void FixedUpdate()
         {
-            _rb.AddForce(Inputs.PlayerDirection * _acceleration);
+            var direction = Inputs.PlayerDirection;
 
-            if (Inputs.PlayerDirection.magnitude == 0)
+            _rb.AddForce(direction * _acceleration);
+
+            // aucun input
+            if (direction.magnitude == 0)
+            {
                 _rb.velocity *= 0.9f;
-
+                _animator.SetBool("IsMoving", false);
+            }
+            else
+            {
+                _animator.SetFloat("X", direction.x);
+                _animator.SetFloat("Y", direction.y);
+                _animator.SetBool("IsMoving", true);
+            }
+            
             _rb.velocity = Vector2.ClampMagnitude(_rb.velocity, _maxVelocity);
         }
 
