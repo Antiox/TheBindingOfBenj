@@ -303,7 +303,7 @@ namespace GameLibrary
                 }
             }
 
-            return startCoord != Vector2.zero;
+            return startCoord != new Vector2(-1, -1);
         }
 
         /// <summary>
