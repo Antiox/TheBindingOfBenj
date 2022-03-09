@@ -242,7 +242,7 @@ namespace GameLibrary
 
             var startCoord = RandomPossibleCoordinates(predicate, size);
 
-            if (startCoord != Vector2.zero)
+            if (startCoord != new Vector2(-1, -1))
             {
                 for (int j = 0; j < size.y; j++)
                 {
@@ -359,7 +359,7 @@ namespace GameLibrary
             }
             var randomIndex = Random.Range(0, possibleValues.Count);
 
-            return possibleValues.Count == 0 ? Vector2.zero : possibleValues[randomIndex];
+            return possibleValues.Count == 0 ? new Vector2(-1, -1) : possibleValues[randomIndex];
         }
 
         /// <summary>
