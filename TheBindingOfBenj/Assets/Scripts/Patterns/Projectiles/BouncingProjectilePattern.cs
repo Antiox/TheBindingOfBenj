@@ -17,7 +17,8 @@ namespace GameLibrary
             var direction = (_target - _source.transform.position).normalized;
             while (true)
             {
-                var hit = Physics2D.CircleCast(_source.transform.position, 0.5f, _source.transform.up, 0.25f, ~(LayerMask.GetMask("Player") | LayerMask.GetMask("DeactivatedWall") | LayerMask.GetMask("Enemy") | LayerMask.GetMask("Weapon") | LayerMask.GetMask("SummoningEnemy")));
+                var hit = Physics2D.CircleCast(_source.transform.position, 0.5f, _source.transform.up, 0.25f, ~(LayerMask.GetMask("Player") | LayerMask.GetMask("DeactivatedWall") | LayerMask.GetMask("Enemy") | LayerMask.GetMask("Weapon") | LayerMask.GetMask("SummoningEnemy")
+                    | LayerMask.GetMask("FeetCollider")));
 
                 // si collision on fait rebondir selon la normale
                 if (hit.collider != null) direction = Vector3.Reflect(direction, hit.normal.normalized);

@@ -413,7 +413,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 1
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -433,8 +433,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 2.7, y: 5.1}
+  m_Offset: {x: 0, y: -0.66998744}
+  m_Size: {x: 2.7, y: 4.6196313}
   m_Direction: 0
 --- !u!33 &5619080885673228937
 MeshFilter:
@@ -530,7 +530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40f7e3525e8db5f4aace8aaa499fed0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipedWeapon: {fileID: 11400000, guid: 5d821506537841f42b40ab0d1ae695f5, type: 2}
+  _equipedWeapon: {fileID: 11400000, guid: d6cb9f60a3087334291b4bc2257b1d4a, type: 2}
   _enemyMask:
     serializedVersion: 2
     m_Bits: 512

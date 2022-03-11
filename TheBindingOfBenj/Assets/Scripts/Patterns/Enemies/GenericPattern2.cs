@@ -18,16 +18,16 @@ namespace GameLibrary
             yield return new WaitForSeconds(1f);
             while (true)
             {
-
+                var targetPosition = _player.transform.position;
                 var t = 0f;
-                while (t < 3f)
+                while (t < 1.5f)
                 {
-                    _enemy.transform.position = Vector3.MoveTowards(_enemy.transform.position, _player.transform.position, Time.deltaTime * 2f);
+                    _enemy.transform.position = Vector3.MoveTowards(_enemy.transform.position, targetPosition, Time.deltaTime * 13f);
                     t += Time.deltaTime;
                     yield return new WaitForEndOfFrame();
                 }
 
-                yield return new WaitForSeconds(3f);
+                yield return new WaitForSeconds(1.5f);
             }
         }
     }
